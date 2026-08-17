@@ -1,0 +1,79 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Dashboard — Opportunity Platform">
+    <section class="py-16">
+
+        <div class="mb-10">
+            <p class="text-white/60 text-sm mb-2">
+                Welcome back
+            </p>
+
+            <h1 class="text-4xl sm:text-5xl font-extrabold">
+                Your Dashboard
+            </h1>
+
+            <p class="text-white/70 mt-4 max-w-2xl">
+                Discover, save, and track opportunities that match your goals.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <div class="p-6 rounded-2xl bg-white/10 border border-white/10">
+                <div class="text-3xl mb-4">🔎</div>
+
+                <h2 class="text-xl font-bold mb-2">
+                    Discover
+                </h2>
+
+                <p class="text-white/70 mb-6">
+                    Browse scholarships, fellowships, research positions,
+                    grants, and other opportunities.
+                </p>
+
+                <a
+                    href="/opportunities"
+                    class="btn btn-primary"
+                >
+                    Explore
+                </a>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-white/10 border border-white/10">
+                <div class="text-3xl mb-4">⭐</div>
+
+                <h2 class="text-xl font-bold mb-2">
+                    Saved
+                </h2>
+
+                <p class="text-white/70 mb-6">
+                    Keep track of opportunities you want to apply for.
+                </p>
+
+                <button class="btn btn-outline text-white">
+                    View Saved
+                </button>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-white/10 border border-white/10">
+                <div class="text-3xl mb-4">📋</div>
+
+                <h2 class="text-xl font-bold mb-2">
+                    Applications
+                </h2>
+
+                <p class="text-white/70 mb-6">
+                    Track your applications, deadlines, and progress.
+                </p>
+
+                <button class="btn btn-outline text-white">
+                    View Applications
+                </button>
+            </div>
+
+        </div>
+
+    </section>
+</Layout>
