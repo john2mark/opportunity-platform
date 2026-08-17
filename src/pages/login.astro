@@ -1,0 +1,51 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Sign in — Opportunity Platform">
+    <section class="flex flex-col items-center justify-center text-center py-24">
+
+        <h1 class="text-4xl sm:text-5xl font-extrabold mb-4">
+            Welcome back
+        </h1>
+
+    <p class="text-white/70 max-w-md mb-8">
+        Sign in to discover opportunities, save your favourites,
+        and track your applications.
+    </p>
+
+    <button
+        id="google-sign-in"
+        class="btn btn-lg btn-primary"
+    >
+        Continue with Google
+    </button>
+
+    <p id="status" class="mt-6 text-sm text-white/70"></p>
+
+</section>
+
+<script>
+    import { supabase } from '../lib/supabase';
+
+    const button = document.getElementById('google-sign-in');
+    const status = document.getElementById('status');
+
+    button?.addEventListener('click', async () => {
+        if (status) {
+            status.textContent = 'Connecting to Google...';
+        }
+
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: `${window.location.origin}/dashboard`
+            }
+        });
+
+        if (error && status) {
+            status.textContent = error.message;
+        }
+    });
+</script>
+</Layout>
