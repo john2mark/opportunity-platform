@@ -1,15 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { supabase } from '../lib/supabase';
-
-const { data: { user } } = await supabase.auth.getUser();
 ---
+
 <Layout title="Dashboard — Opportunity Platform">
     <section class="py-16">
 
         <div class="mb-10">
-            <p class="text-white/60 text-sm mb-2">
-               Welcome back{user?.user_metadata?.full_name ? `, ${user.user_metadata.full_name}` : ''}
+            <p class="text-white/60 text-sm mb-2" id="welcome-message">
+                Welcome back
             </p>
 
             <h1 class="text-4xl sm:text-5xl font-extrabold">
@@ -77,5 +75,42 @@ const { data: { user } } = await supabase.auth.getUser();
 
         </div>
 
+        <div class="mt-10">
+            <button
+                id="sign-out"
+                class="btn btn-outline text-white"
+            >
+                Sign out
+            </button>
+        </div>
+
     </section>
+
+    <script>
+        import { supabase } from '../lib/supabase';
+
+        const welcomeMessage =
+            document.getElementById('welcome-message');
+
+        const signOutButton =
+            document.getElementById('sign-out');
+
+        const { data: { user } } =
+            await supabase.auth.getUser();
+
+        if (user && welcomeMessage) {
+            const name =
+                user.user_metadata?.full_name ||
+                user.email ||
+                'there';
+
+            welcomeMessage.textContent =
+                `Welcome back, ${name}`;
+        }
+
+        signOutButton?.addEventListener('click', async () => {
+            await supabase.auth.signOut();
+            window.location.href = '/login';
+        });
+    </script>
 </Layout>
