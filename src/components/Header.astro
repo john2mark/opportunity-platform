@@ -1,21 +1,10 @@
 ---
-import { supabase } from '../lib/supabase';
-
 const navItems = [
     { linkText: 'Explore', href: '/' },
     { linkText: 'Opportunities', href: '/opportunities' },
     { linkText: 'Saved', href: '/saved' },
     { linkText: 'Applications', href: '/applications' }
 ];
-
-const {
-    data: { user }
-} = await supabase.auth.getUser();
-
-const displayName =
-    user?.user_metadata?.full_name ||
-    user?.email?.split('@')[0] ||
-    'Account';
 ---
 
 <header class="op-navbar">
@@ -25,22 +14,19 @@ const displayName =
             <!-- Brand -->
             <a href="/" class="op-brand" style="text-decoration:none;">
                 <span class="op-brand-mark">O</span>
-
-                <span>
-                    Oppvia
-                </span>
+                <span>ppvia</span>
             </a>
 
             <!-- Main navigation -->
             <nav aria-label="Main navigation">
                 <ul
                     style="
-                        display: flex;
-                        align-items: center;
-                        gap: 6px;
-                        list-style: none;
-                        margin: 0;
-                        padding: 0;
+                        display:flex;
+                        align-items:center;
+                        gap:6px;
+                        list-style:none;
+                        margin:0;
+                        padding:0;
                     "
                 >
                     {
@@ -49,13 +35,13 @@ const displayName =
                                 <a
                                     href={item.href}
                                     style="
-                                        display: block;
-                                        padding: 9px 12px;
-                                        border-radius: 10px;
-                                        color: #94a3b8;
-                                        text-decoration: none;
-                                        font-size: 14px;
-                                        font-weight: 600;
+                                        display:block;
+                                        padding:9px 12px;
+                                        border-radius:10px;
+                                        color:#94a3b8;
+                                        text-decoration:none;
+                                        font-size:14px;
+                                        font-weight:600;
                                     "
                                 >
                                     {item.linkText}
@@ -68,14 +54,13 @@ const displayName =
 
             <!-- Right side -->
             <div
+                id="auth-area"
                 style="
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
+                    display:flex;
+                    align-items:center;
+                    gap:10px;
                 "
             >
-
-                <!-- AI -->
                 <a
                     href="/ai"
                     class="op-btn op-btn-secondary"
@@ -84,46 +69,46 @@ const displayName =
                     ✨ AI Assistant
                 </a>
 
-                {
-                    user ? (
-                        <>
-                            <a
-                                href="/dashboard"
-                                class="op-btn op-btn-primary"
-                                style="text-decoration:none;"
-                            >
-                                {displayName}
-                            </a>
+                <!-- Temporary logged-out state -->
+                <a
+                    id="header-signin"
+                    href="/login"
+                    class="op-btn op-btn-primary"
+                    style="text-decoration:none;"
+                >
+                    Sign in
+                </a>
 
-                            <button
-                                id="header-signout"
-                                class="op-btn op-btn-secondary"
-                                type="button"
-                            >
-                                Sign out
-                            </button>
-                        </>
-                    ) : (
-                        <>
-                            <a
-                                href="/login"
-                                class="op-btn op-btn-primary"
-                                style="text-decoration:none;"
-                            >
-                                Sign in
-                            </a>
+                <a
+                    id="header-signup"
+                    href="/signup"
+                    class="op-btn op-btn-secondary"
+                    style="text-decoration:none;"
+                >
+                    Create account
+                </a>
 
-                            <a
-                                href="/signup"
-                                class="op-btn op-btn-secondary"
-                                style="text-decoration:none;"
-                            >
-                                Create account
-                            </a>
-                        </>
-                    )
-                }
+                <!-- Logged-in state -->
+                <a
+                    id="header-dashboard"
+                    href="/dashboard"
+                    class="op-btn op-btn-primary"
+                    style="
+                        text-decoration:none;
+                        display:none;
+                    "
+                >
+                    Account
+                </a>
 
+                <button
+                    id="header-signout"
+                    class="op-btn op-btn-secondary"
+                    type="button"
+                    style="display:none;"
+                >
+                    Sign out
+                </button>
             </div>
 
         </div>
@@ -133,17 +118,79 @@ const displayName =
 <script>
     import { supabase } from '../lib/supabase';
 
-    const signOutButton =
+    const signIn =
+        document.getElementById('header-signin');
+
+    const signUp =
+        document.getElementById('header-signup');
+
+    const dashboard =
+        document.getElementById('header-dashboard');
+
+    const signOut =
         document.getElementById('header-signout');
 
-    signOutButton?.addEventListener(
-        'click',
-        async () => {
+    async function updateHeader() {
 
-            await supabase.auth.signOut();
+        const {
+            data: { user }
+        } = await supabase.auth.getUser();
 
-            window.location.href = '/login';
+        if (user) {
 
+            const name =
+                user.user_metadata?.full_name ||
+                user.email ||
+                'Account';
+
+            if (signIn) {
+                signIn.style.display = 'none';
+            }
+
+            if (signUp) {
+                signUp.style.display = 'none';
+            }
+
+            if (dashboard) {
+                dashboard.textContent = name;
+                dashboard.style.display = 'inline-flex';
+            }
+
+            if (signOut) {
+                signOut.style.display = 'inline-flex';
+            }
+
+        } else {
+
+            if (signIn) {
+                signIn.style.display = 'inline-flex';
+            }
+
+            if (signUp) {
+                signUp.style.display = 'inline-flex';
+            }
+
+            if (dashboard) {
+                dashboard.style.display = 'none';
+            }
+
+            if (signOut) {
+                signOut.style.display = 'none';
+            }
         }
-    );
+    }
+
+    await updateHeader();
+
+    supabase.auth.onAuthStateChange(() => {
+        updateHeader();
+    });
+
+    signOut?.addEventListener('click', async () => {
+
+        await supabase.auth.signOut();
+
+        window.location.href = '/login';
+
+    });
 </script>
