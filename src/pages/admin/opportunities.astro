@@ -30,6 +30,7 @@ import Layout from '../../layouts/Layout.astro';
             </div>
         </div>
 
+
         <!-- Access denied -->
 
         <div
@@ -57,6 +58,7 @@ import Layout from '../../layouts/Layout.astro';
 
         <div id="admin-content" class="hidden">
 
+
             <!-- Add opportunity form -->
 
             <div
@@ -77,7 +79,8 @@ import Layout from '../../layouts/Layout.astro';
 
                 <form id="opportunity-form">
 
-                    <!-- Basic information -->
+
+                    <!-- Basic Information -->
 
                     <div class="mb-8">
 
@@ -87,7 +90,9 @@ import Layout from '../../layouts/Layout.astro';
 
                         <div class="grid gap-5 md:grid-cols-2">
 
+
                             <div class="md:col-span-2">
+
                                 <label class="block text-white/70 text-sm mb-2">
                                     Opportunity title *
                                 </label>
@@ -99,10 +104,12 @@ import Layout from '../../layouts/Layout.astro';
                                     class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
                                     placeholder="e.g. DAAD Development-Related Postgraduate Courses"
                                 />
+
                             </div>
 
 
                             <div>
+
                                 <label class="block text-white/70 text-sm mb-2">
                                     Institution *
                                 </label>
@@ -114,10 +121,14 @@ import Layout from '../../layouts/Layout.astro';
                                     class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
                                     placeholder="University or organization"
                                 />
+
                             </div>
 
 
+                            <!-- Opportunity Type -->
+
                             <div>
+
                                 <label class="block text-white/70 text-sm mb-2">
                                     Opportunity type *
                                 </label>
@@ -125,42 +136,146 @@ import Layout from '../../layouts/Layout.astro';
                                 <select
                                     name="Opportunity_type"
                                     required
-                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                    class="w-full rounded-lg bg-slate-900 border border-white/20 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white/30"
                                 >
-                                    <option value="">Select type</option>
-                                    <option value="Scholarship">Scholarship</option>
-                                    <option value="Fellowship">Fellowship</option>
-                                    <option value="Research Position">Research Position</option>
-                                    <option value="Grant">Grant</option>
-                                    <option value="Internship">Internship</option>
-                                    <option value="Postdoctoral Position">Postdoctoral Position</option>
-                                    <option value="Conference">Conference</option>
-                                    <option value="Other">Other</option>
+
+                                    <option
+                                        value=""
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Select type
+                                    </option>
+
+                                    <option
+                                        value="Scholarship"
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Scholarship
+                                    </option>
+
+                                    <option
+                                        value="Fellowship"
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Fellowship
+                                    </option>
+
+                                    <option
+                                        value="Research Position"
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Research Position
+                                    </option>
+
+                                    <option
+                                        value="Grant"
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Grant
+                                    </option>
+
+                                    <option
+                                        value="Internship"
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Internship
+                                    </option>
+
+                                    <option
+                                        value="Postdoctoral Position"
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Postdoctoral Position
+                                    </option>
+
+                                    <option
+                                        value="Conference"
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Conference
+                                    </option>
+
+                                    <option
+                                        value="Other"
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Other
+                                    </option>
+
                                 </select>
+
                             </div>
 
 
+                            <!-- Academic Level -->
+
                             <div>
+
                                 <label class="block text-white/70 text-sm mb-2">
                                     Academic level
                                 </label>
 
                                 <select
                                     name="Academic_level"
-                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                    class="w-full rounded-lg bg-slate-900 border border-white/20 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white/30"
                                 >
-                                    <option value="">Select level</option>
-                                    <option value="Undergraduate">Undergraduate</option>
-                                    <option value="Masters">Masters</option>
-                                    <option value="PhD">PhD</option>
-                                    <option value="Postdoctoral">Postdoctoral</option>
-                                    <option value="Professional">Professional</option>
-                                    <option value="Any">Any</option>
+
+                                    <option
+                                        value=""
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Select level
+                                    </option>
+
+                                    <option
+                                        value="Undergraduate"
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Undergraduate
+                                    </option>
+
+                                    <option
+                                        value="Masters"
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Masters
+                                    </option>
+
+                                    <option
+                                        value="PhD"
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        PhD
+                                    </option>
+
+                                    <option
+                                        value="Postdoctoral"
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Postdoctoral
+                                    </option>
+
+                                    <option
+                                        value="Professional"
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Professional
+                                    </option>
+
+                                    <option
+                                        value="Any"
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Any
+                                    </option>
+
                                 </select>
+
                             </div>
 
 
                             <div>
+
                                 <label class="block text-white/70 text-sm mb-2">
                                     Discipline
                                 </label>
@@ -171,9 +286,11 @@ import Layout from '../../layouts/Layout.astro';
                                     class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
                                     placeholder="e.g. Law, Chemistry, AI, Engineering"
                                 />
+
                             </div>
 
                         </div>
+
                     </div>
 
 
@@ -188,6 +305,7 @@ import Layout from '../../layouts/Layout.astro';
                         <div class="grid gap-5 md:grid-cols-2">
 
                             <div>
+
                                 <label class="block text-white/70 text-sm mb-2">
                                     Country
                                 </label>
@@ -198,10 +316,12 @@ import Layout from '../../layouts/Layout.astro';
                                     class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
                                     placeholder="e.g. Germany"
                                 />
+
                             </div>
 
 
                             <div>
+
                                 <label class="block text-white/70 text-sm mb-2">
                                     City
                                 </label>
@@ -212,13 +332,15 @@ import Layout from '../../layouts/Layout.astro';
                                     class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
                                     placeholder="e.g. Berlin"
                                 />
+
                             </div>
 
                         </div>
+
                     </div>
 
 
-                    <!-- Deadline and funding -->
+                    <!-- Deadline & Funding -->
 
                     <div class="mb-8">
 
@@ -228,7 +350,9 @@ import Layout from '../../layouts/Layout.astro';
 
                         <div class="grid gap-5 md:grid-cols-2">
 
+
                             <div>
+
                                 <label class="block text-white/70 text-sm mb-2">
                                     Deadline
                                 </label>
@@ -238,26 +362,74 @@ import Layout from '../../layouts/Layout.astro';
                                     name="Deadline"
                                     class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
                                 />
+
                             </div>
 
 
+                            <!-- Funding Type -->
+
                             <div>
+
                                 <label class="block text-white/70 text-sm mb-2">
                                     Funding type
                                 </label>
 
                                 <select
                                     name="Funding_type"
-                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                    class="w-full rounded-lg bg-slate-900 border border-white/20 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-white/30"
                                 >
-                                    <option value="">Select funding</option>
-                                    <option value="Fully Funded">Fully Funded</option>
-                                    <option value="Partially Funded">Partially Funded</option>
-                                    <option value="Tuition Only">Tuition Only</option>
-                                    <option value="Stipend">Stipend</option>
-                                    <option value="Self Funded">Self Funded</option>
-                                    <option value="Varies">Varies</option>
+
+                                    <option
+                                        value=""
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Select funding
+                                    </option>
+
+                                    <option
+                                        value="Fully Funded"
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Fully Funded
+                                    </option>
+
+                                    <option
+                                        value="Partially Funded"
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Partially Funded
+                                    </option>
+
+                                    <option
+                                        value="Tuition Only"
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Tuition Only
+                                    </option>
+
+                                    <option
+                                        value="Stipend"
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Stipend
+                                    </option>
+
+                                    <option
+                                        value="Self Funded"
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Self Funded
+                                    </option>
+
+                                    <option
+                                        value="Varies"
+                                        class="bg-slate-900 text-white"
+                                    >
+                                        Varies
+                                    </option>
+
                                 </select>
+
                             </div>
 
 
@@ -301,6 +473,7 @@ import Layout from '../../layouts/Layout.astro';
                             </label>
 
                         </div>
+
                     </div>
 
 
@@ -314,7 +487,9 @@ import Layout from '../../layouts/Layout.astro';
 
                         <div class="grid gap-5">
 
+
                             <div>
+
                                 <label class="block text-white/70 text-sm mb-2">
                                     Eligibility summary
                                 </label>
@@ -325,10 +500,12 @@ import Layout from '../../layouts/Layout.astro';
                                     class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
                                     placeholder="Who can apply?"
                                 ></textarea>
+
                             </div>
 
 
                             <div>
+
                                 <label class="block text-white/70 text-sm mb-2">
                                     Nationality requirement
                                 </label>
@@ -339,34 +516,42 @@ import Layout from '../../layouts/Layout.astro';
                                     class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
                                     placeholder="e.g. Open to all nationalities"
                                 />
+
                             </div>
 
 
                             <div class="grid gap-5 md:grid-cols-2">
 
                                 <label class="flex items-center gap-3 text-white/80">
+
                                     <input
                                         type="checkbox"
                                         name="Transcript_accepted"
                                         class="h-4 w-4"
                                     />
+
                                     Transcript accepted at application
+
                                 </label>
 
 
                                 <label class="flex items-center gap-3 text-white/80">
+
                                     <input
                                         type="checkbox"
                                         name="Degree_required_at_application"
                                         class="h-4 w-4"
                                     />
+
                                     Degree required at application
+
                                 </label>
 
                             </div>
 
 
                             <div>
+
                                 <label class="block text-white/70 text-sm mb-2">
                                     English requirement
                                 </label>
@@ -377,10 +562,12 @@ import Layout from '../../layouts/Layout.astro';
                                     class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
                                     placeholder="e.g. IELTS 6.5 or equivalent"
                                 />
+
                             </div>
 
 
                             <div>
+
                                 <label class="block text-white/70 text-sm mb-2">
                                     Documents summary
                                 </label>
@@ -391,13 +578,15 @@ import Layout from '../../layouts/Layout.astro';
                                     class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
                                     placeholder="Required application documents"
                                 ></textarea>
+
                             </div>
 
                         </div>
+
                     </div>
 
 
-                    <!-- Application -->
+                    <!-- Application Information -->
 
                     <div class="mb-8">
 
@@ -407,7 +596,9 @@ import Layout from '../../layouts/Layout.astro';
 
                         <div class="grid gap-5 md:grid-cols-2">
 
+
                             <div class="md:col-span-2">
+
                                 <label class="block text-white/70 text-sm mb-2">
                                     Official URL
                                 </label>
@@ -418,10 +609,12 @@ import Layout from '../../layouts/Layout.astro';
                                     class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
                                     placeholder="https://..."
                                 />
+
                             </div>
 
 
                             <div>
+
                                 <label class="block text-white/70 text-sm mb-2">
                                     Contact name
                                 </label>
@@ -431,10 +624,12 @@ import Layout from '../../layouts/Layout.astro';
                                     name="Contact_name"
                                     class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
                                 />
+
                             </div>
 
 
                             <div>
+
                                 <label class="block text-white/70 text-sm mb-2">
                                     Contact email
                                 </label>
@@ -444,10 +639,12 @@ import Layout from '../../layouts/Layout.astro';
                                     name="Contact_email"
                                     class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
                                 />
+
                             </div>
 
 
                             <div>
+
                                 <label class="block text-white/70 text-sm mb-2">
                                     Relocation support
                                 </label>
@@ -458,10 +655,12 @@ import Layout from '../../layouts/Layout.astro';
                                     class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
                                     placeholder="e.g. Available / Not provided"
                                 />
+
                             </div>
 
 
                             <div>
+
                                 <label class="block text-white/70 text-sm mb-2">
                                     Visa information
                                 </label>
@@ -471,9 +670,11 @@ import Layout from '../../layouts/Layout.astro';
                                     name="Visa_information"
                                     class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
                                 />
+
                             </div>
 
                         </div>
+
                     </div>
 
 
@@ -494,6 +695,8 @@ import Layout from '../../layouts/Layout.astro';
 
                     </div>
 
+
+                    <!-- Form message -->
 
                     <div
                         id="form-message"
@@ -525,13 +728,14 @@ import Layout from '../../layouts/Layout.astro';
             </div>
 
 
-            <!-- Opportunities list -->
+            <!-- Opportunities -->
 
             <div class="rounded-xl border border-white/10 bg-white/5 p-6">
 
                 <div class="flex items-center justify-between mb-6">
 
                     <div>
+
                         <h2 class="text-2xl font-semibold text-white">
                             Opportunities
                         </h2>
@@ -539,7 +743,9 @@ import Layout from '../../layouts/Layout.astro';
                         <p class="text-white/60 mt-1">
                             Your opportunity database.
                         </p>
+
                     </div>
+
 
                     <button
                         id="add-opportunity"
@@ -551,7 +757,10 @@ import Layout from '../../layouts/Layout.astro';
                 </div>
 
 
-                <div id="loading" class="text-white/60">
+                <div
+                    id="loading"
+                    class="text-white/60"
+                >
                     Loading opportunities...
                 </div>
 
@@ -681,6 +890,7 @@ import Layout from '../../layouts/Layout.astro';
                 window.location.href = '/login';
 
                 return;
+
             }
 
 
@@ -707,6 +917,7 @@ import Layout from '../../layouts/Layout.astro';
                 accessDenied?.classList.remove('hidden');
 
                 return;
+
             }
 
 
@@ -726,6 +937,37 @@ import Layout from '../../layouts/Layout.astro';
 
 
         async function loadOpportunities() {
+
+
+            if (loading) {
+
+                loading.classList.remove('hidden');
+
+            }
+
+
+            if (emptyState) {
+
+                emptyState.classList.add('hidden');
+
+            }
+
+
+            if (opportunitiesContainer) {
+
+                opportunitiesContainer.classList.add(
+                    'hidden'
+                );
+
+            }
+
+
+            if (opportunitiesList) {
+
+                opportunitiesList.innerHTML = '';
+
+            }
+
 
             const {
                 data: opportunities,
@@ -752,11 +994,14 @@ import Layout from '../../layouts/Layout.astro';
                     emptyState.textContent =
                         'Unable to load opportunities.';
 
-                    emptyState.classList.remove('hidden');
+                    emptyState.classList.remove(
+                        'hidden'
+                    );
 
                 }
 
                 return;
+
             }
 
 
@@ -765,9 +1010,19 @@ import Layout from '../../layouts/Layout.astro';
                 opportunities.length === 0
             ) {
 
-                emptyState?.classList.remove('hidden');
+                if (emptyState) {
+
+                    emptyState.textContent =
+                        'No opportunities have been added yet.';
+
+                    emptyState.classList.remove(
+                        'hidden'
+                    );
+
+                }
 
                 return;
+
             }
 
 
@@ -776,18 +1031,14 @@ import Layout from '../../layouts/Layout.astro';
             );
 
 
-            if (opportunitiesList) {
-
-                opportunitiesList.innerHTML = '';
-
-            }
-
-
             opportunities.forEach(
                 (opportunity) => {
 
                     const row =
-                        document.createElement('tr');
+                        document.createElement(
+                            'tr'
+                        );
+
 
                     row.className =
                         'border-b border-white/10';
@@ -820,13 +1071,11 @@ import Layout from '../../layouts/Layout.astro';
                             ${opportunity.Deadline || '—'}
                         </td>
 
-                        <td class="py-4 pr-4">
-                            <span class="text-white/80">
-                                ${escapeHtml(
-                                    opportunity.Status ||
-                                    '—'
-                                )}
-                            </span>
+                        <td class="py-4 pr-4 text-white/80">
+                            ${escapeHtml(
+                                opportunity.Status ||
+                                '—'
+                            )}
                         </td>
 
                     `;
@@ -890,13 +1139,9 @@ import Layout from '../../layouts/Layout.astro';
 
             opportunityForm?.reset();
 
-            if (formMessage) {
-
-                formMessage.classList.add(
-                    'hidden'
-                );
-
-            }
+            formMessage?.classList.add(
+                'hidden'
+            );
 
         }
 
@@ -1095,6 +1340,7 @@ import Layout from '../../layouts/Layout.astro';
                     }
 
                     return;
+
                 }
 
 
@@ -1111,7 +1357,17 @@ import Layout from '../../layouts/Layout.astro';
 
                 opportunityForm?.reset();
 
+
                 await loadOpportunities();
+
+
+                if (opportunityFormContainer) {
+
+                    opportunityFormContainer.classList.add(
+                        'hidden'
+                    );
+
+                }
 
             }
         );
