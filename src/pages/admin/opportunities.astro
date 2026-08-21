@@ -1,1 +1,300 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
 
+<Layout title="Manage Opportunities — Opportunity Platform">
+    <section class="py-16">
+
+        <div class="mb-10">
+            <p class="text-white/60 text-sm mb-2" id="admin-status">
+                Checking access...
+            </p>
+
+            <div class="flex items-center justify-between gap-4">
+                <div>
+                    <h1 class="text-4xl font-bold text-white">
+                        Manage Opportunities
+                    </h1>
+
+                    <p class="text-white/60 mt-2">
+                        Add, review, publish, and manage opportunities.
+                    </p>
+                </div>
+
+                <a
+                    href="/dashboard"
+                    class="btn btn-outline text-white"
+                >
+                    Back to Dashboard
+                </a>
+            </div>
+        </div>
+
+        <div
+            id="access-denied"
+            class="hidden rounded-xl border border-red-400/20 bg-red-400/10 p-6 text-white"
+        >
+            <h2 class="text-xl font-semibold mb-2">
+                Access denied
+            </h2>
+
+            <p class="text-white/70">
+                You must be an administrator to access this page.
+            </p>
+
+            <a
+                href="/dashboard"
+                class="inline-block mt-4 btn btn-outline text-white"
+            >
+                Return to Dashboard
+            </a>
+        </div>
+
+        <div id="admin-content" class="hidden">
+
+            <div class="rounded-xl border border-white/10 bg-white/5 p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-2xl font-semibold text-white">
+                            Opportunities
+                        </h2>
+
+                        <p class="text-white/60 mt-1">
+                            Your opportunity database.
+                        </p>
+                    </div>
+
+                    <button
+                        id="add-opportunity"
+                        class="btn btn-primary"
+                    >
+                        + Add Opportunity
+                    </button>
+                </div>
+
+                <div id="loading" class="text-white/60">
+                    Loading opportunities...
+                </div>
+
+                <div
+                    id="empty-state"
+                    class="hidden text-white/60 py-8 text-center"
+                >
+                    No opportunities have been added yet.
+                </div>
+
+                <div
+                    id="opportunities-container"
+                    class="hidden overflow-x-auto"
+                >
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="py-3 pr-4 text-white/60">
+                                    Title
+                                </th>
+
+                                <th class="py-3 pr-4 text-white/60">
+                                    Institution
+                                </th>
+
+                                <th class="py-3 pr-4 text-white/60">
+                                    Country
+                                </th>
+
+                                <th class="py-3 pr-4 text-white/60">
+                                    Deadline
+                                </th>
+
+                                <th class="py-3 pr-4 text-white/60">
+                                    Status
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="opportunities-list"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <script>
+        import { supabase } from '../../lib/supabase';
+
+        const adminStatus =
+            document.getElementById('admin-status');
+
+        const accessDenied =
+            document.getElementById('access-denied');
+
+        const adminContent =
+            document.getElementById('admin-content');
+
+        const loading =
+            document.getElementById('loading');
+
+        const emptyState =
+            document.getElementById('empty-state');
+
+        const opportunitiesContainer =
+            document.getElementById('opportunities-container');
+
+        const opportunitiesList =
+            document.getElementById('opportunities-list');
+
+        const addOpportunityButton =
+            document.getElementById('add-opportunity');
+
+
+        async function checkAdminAccess() {
+
+            const {
+                data: { user },
+                error: userError
+            } = await supabase.auth.getUser();
+
+            if (userError || !user) {
+                window.location.href = '/login';
+                return;
+            }
+
+
+            const { data: role, error: roleError } =
+                await supabase
+                    .from('user_roles')
+                    .select('role')
+                    .eq('user_id', user.id)
+                    .eq('role', 'admin')
+                    .maybeSingle();
+
+
+            if (roleError || !role) {
+
+                if (adminStatus) {
+                    adminStatus.textContent =
+                        'You do not have administrator access.';
+                }
+
+                accessDenied?.classList.remove('hidden');
+
+                return;
+            }
+
+
+            if (adminStatus) {
+                adminStatus.textContent =
+                    `Signed in as ${user.email}`;
+            }
+
+            adminContent?.classList.remove('hidden');
+
+            await loadOpportunities();
+        }
+
+
+        async function loadOpportunities() {
+
+            const {
+                data: opportunities,
+                error
+            } = await supabase
+                .from('Opportunities')
+                .select(
+                    'Id, Title, Institution, Country, Deadline, Status'
+                )
+                .order('Created_at', {
+                    ascending: false
+                });
+
+
+            loading?.classList.add('hidden');
+
+
+            if (error) {
+
+                console.error(error);
+
+                if (emptyState) {
+                    emptyState.textContent =
+                        'Unable to load opportunities.';
+                    emptyState.classList.remove('hidden');
+                }
+
+                return;
+            }
+
+
+            if (!opportunities || opportunities.length === 0) {
+                emptyState?.classList.remove('hidden');
+                return;
+            }
+
+
+            opportunitiesContainer?.classList.remove('hidden');
+
+
+            opportunities.forEach((opportunity) => {
+
+                const row =
+                    document.createElement('tr');
+
+                row.className =
+                    'border-b border-white/10';
+
+
+                row.innerHTML = `
+                    <td class="py-4 pr-4 text-white">
+                        ${escapeHtml(opportunity.Title || 'Untitled')}
+                    </td>
+
+                    <td class="py-4 pr-4 text-white/70">
+                        ${escapeHtml(opportunity.Institution || '—')}
+                    </td>
+
+                    <td class="py-4 pr-4 text-white/70">
+                        ${escapeHtml(opportunity.Country || '—')}
+                    </td>
+
+                    <td class="py-4 pr-4 text-white/70">
+                        ${opportunity.Deadline || '—'}
+                    </td>
+
+                    <td class="py-4 pr-4">
+                        <span class="text-white/80">
+                            ${escapeHtml(opportunity.Status || '—')}
+                        </span>
+                    </td>
+                `;
+
+                opportunitiesList?.appendChild(row);
+            });
+        }
+
+
+        function escapeHtml(value) {
+
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+
+        addOpportunityButton?.addEventListener(
+            'click',
+            () => {
+                alert(
+                    'The Add Opportunity form will be added next.'
+                );
+            }
+        );
+
+
+        checkAdminAccess();
+    </script>
+</Layout>
