@@ -2,68 +2,391 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Opportunity Platform">
-    <section class="flex flex-col items-center justify-center text-center py-20 sm:py-28">
-   
-        <div class="mb-6">
-        <span class="px-4 py-2 text-sm font-bold rounded-full bg-white/10 border border-white/20">
-            Opportunities built around you
-        </span>
-    </div>
+<Layout title="Oppvia — Discover Opportunities">
 
-    <h1 class="text-5xl sm:text-6xl font-extrabold tracking-tight mb-6">
-        Find opportunities.<br />
-        Build your future.
-    </h1>
+    <!-- HERO -->
+    <section class="relative overflow-hidden py-20 sm:py-28">
 
-    <p class="max-w-2xl text-lg sm:text-xl text-white/80 mb-10">
-        Discover scholarships, fellowships, postdoctoral positions,
-        research opportunities, grants, and other opportunities matched
-        to your goals.
-    </p>
+        <div
+            class="absolute inset-0 -z-10"
+            style="
+                background:
+                radial-gradient(circle at 50% 20%, rgba(124,58,237,0.20), transparent 35%),
+                radial-gradient(circle at 10% 80%, rgba(59,130,246,0.12), transparent 30%);
+            "
+        ></div>
 
-    <div class="flex flex-col sm:flex-row gap-4">
-        <a href="/opportunities" class="btn btn-lg btn-primary">
-            Explore Opportunities
-        </a>
+        <div class="max-w-4xl mx-auto text-center">
 
-        <a href="/login" class="btn btn-lg btn-outline text-white">
-            Continue with Google
-        </a>
-    </div>
+            <div class="mb-6">
+                <span
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full
+                    bg-purple-500/10 border border-purple-400/20
+                    text-purple-200 text-sm font-semibold"
+                >
+                    ✨ Opportunities built around you
+                </span>
+            </div>
 
-</section>
+            <h1
+                class="text-5xl sm:text-6xl lg:text-7xl font-extrabold
+                tracking-tight leading-tight mb-7"
+            >
+                Find opportunities.<br />
 
-<section class="pb-20">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <span
+                    style="
+                        background: linear-gradient(
+                            90deg,
+                            #a78bfa,
+                            #60a5fa
+                        );
+                        -webkit-background-clip: text;
+                        background-clip: text;
+                        color: transparent;
+                    "
+                >
+                    Build your future.
+                </span>
+            </h1>
 
-        <div class="p-6 rounded-2xl bg-white/10 border border-white/10">
-            <div class="text-3xl mb-4">🔎</div>
-            <h2 class="text-xl font-bold mb-2">Discover</h2>
-            <p class="text-white/70">
-                Find opportunities across countries, institutions,
-                disciplines, and academic levels.
+            <p
+                class="max-w-2xl mx-auto text-lg sm:text-xl
+                text-slate-300 leading-relaxed mb-10"
+            >
+                Discover scholarships, fellowships, research positions,
+                grants, internships, postdoctoral opportunities, and more —
+                all in one place.
             </p>
+
+            <div
+                class="flex flex-col sm:flex-row
+                items-center justify-center gap-4"
+            >
+
+                <a
+                    href="/opportunities"
+                    class="op-btn op-btn-primary"
+                    style="
+                        text-decoration:none;
+                        padding:14px 24px;
+                        font-size:16px;
+                    "
+                >
+                    Explore Opportunities →
+                </a>
+
+                <a
+                    href="/signup"
+                    class="op-btn op-btn-secondary"
+                    style="
+                        text-decoration:none;
+                        padding:14px 24px;
+                        font-size:16px;
+                    "
+                >
+                    Create your free account
+                </a>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- SEARCH PREVIEW -->
+    <section class="pb-20">
+
+        <div
+            class="max-w-5xl mx-auto rounded-3xl
+            border border-white/10
+            bg-white/[0.04]
+            backdrop-blur-xl
+            p-6 sm:p-8"
+        >
+
+            <div class="mb-6">
+
+                <h2 class="text-2xl font-bold mb-2">
+                    What are you looking for?
+                </h2>
+
+                <p class="text-slate-400">
+                    Search across opportunities from institutions around
+                    the world.
+                </p>
+
+            </div>
+
+            <div
+                class="grid grid-cols-1 md:grid-cols-[1fr_180px_180px_auto]
+                gap-3"
+            >
+
+                <input
+                    type="text"
+                    placeholder="Search scholarships, fellowships..."
+                    class="w-full rounded-xl
+                    bg-slate-900/80
+                    border border-white/10
+                    px-4 py-3
+                    text-white
+                    placeholder:text-slate-500
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-purple-500/50"
+                />
+
+                <select
+                    class="rounded-xl
+                    bg-slate-900
+                    border border-white/10
+                    px-4 py-3
+                    text-white"
+                >
+                    <option value="">Discipline</option>
+                    <option>Law</option>
+                    <option>Science</option>
+                    <option>Technology</option>
+                    <option>Engineering</option>
+                    <option>Medicine</option>
+                    <option>Business</option>
+                    <option>Humanities</option>
+                </select>
+
+                <select
+                    class="rounded-xl
+                    bg-slate-900
+                    border border-white/10
+                    px-4 py-3
+                    text-white"
+                >
+                    <option value="">Funding</option>
+                    <option>Fully Funded</option>
+                    <option>Partially Funded</option>
+                    <option>Tuition Only</option>
+                    <option>Stipend</option>
+                </select>
+
+                <a
+                    href="/opportunities"
+                    class="op-btn op-btn-primary
+                    flex items-center justify-center"
+                    style="text-decoration:none;"
+                >
+                    Search
+                </a>
+
+            </div>
+
         </div>
 
-        <div class="p-6 rounded-2xl bg-white/10 border border-white/10">
-            <div class="text-3xl mb-4">⭐</div>
-            <h2 class="text-xl font-bold mb-2">Save</h2>
-            <p class="text-white/70">
-                Keep interesting opportunities in one place so you
-                don't lose track of them.
+    </section>
+
+
+    <!-- FEATURES -->
+    <section class="pb-24">
+
+        <div class="text-center mb-12">
+
+            <p
+                class="text-sm font-semibold uppercase
+                tracking-widest text-purple-300 mb-3"
+            >
+                One platform
             </p>
+
+            <h2 class="text-3xl sm:text-4xl font-bold">
+                Everything you need to pursue your next opportunity
+            </h2>
+
         </div>
 
-        <div class="p-6 rounded-2xl bg-white/10 border border-white/10">
-            <div class="text-3xl mb-4">📋</div>
-            <h2 class="text-xl font-bold mb-2">Track</h2>
-            <p class="text-white/70">
-                Track applications, deadlines, documents, and outcomes
-                from your personal dashboard.
-            </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <!-- DISCOVER -->
+            <div
+                class="group rounded-2xl
+                bg-white/[0.04]
+                border border-white/10
+                p-7
+                transition
+                hover:border-purple-400/30
+                hover:bg-white/[0.06]"
+            >
+
+                <div
+                    class="w-12 h-12 rounded-xl
+                    bg-purple-500/10
+                    border border-purple-400/20
+                    flex items-center justify-center
+                    text-2xl mb-5"
+                >
+                    🔎
+                </div>
+
+                <h3 class="text-xl font-bold mb-3">
+                    Discover
+                </h3>
+
+                <p class="text-slate-400 leading-relaxed">
+                    Find opportunities across countries, institutions,
+                    disciplines, academic levels, and funding types.
+                </p>
+
+            </div>
+
+
+            <!-- SAVE -->
+            <div
+                class="group rounded-2xl
+                bg-white/[0.04]
+                border border-white/10
+                p-7
+                transition
+                hover:border-purple-400/30
+                hover:bg-white/[0.06]"
+            >
+
+                <div
+                    class="w-12 h-12 rounded-xl
+                    bg-blue-500/10
+                    border border-blue-400/20
+                    flex items-center justify-center
+                    text-2xl mb-5"
+                >
+                    ⭐
+                </div>
+
+                <h3 class="text-xl font-bold mb-3">
+                    Save
+                </h3>
+
+                <p class="text-slate-400 leading-relaxed">
+                    Save opportunities you care about and build your
+                    personal shortlist without losing track.
+                </p>
+
+            </div>
+
+
+            <!-- TRACK -->
+            <div
+                class="group rounded-2xl
+                bg-white/[0.04]
+                border border-white/10
+                p-7
+                transition
+                hover:border-purple-400/30
+                hover:bg-white/[0.06]"
+            >
+
+                <div
+                    class="w-12 h-12 rounded-xl
+                    bg-cyan-500/10
+                    border border-cyan-400/20
+                    flex items-center justify-center
+                    text-2xl mb-5"
+                >
+                    📋
+                </div>
+
+                <h3 class="text-xl font-bold mb-3">
+                    Track
+                </h3>
+
+                <p class="text-slate-400 leading-relaxed">
+                    Track applications, deadlines, documents, and
+                    outcomes from your personal workspace.
+                </p>
+
+            </div>
+
         </div>
 
-    </div>
-</section>
+    </section>
+
+
+    <!-- AI PREVIEW -->
+    <section class="pb-24">
+
+        <div
+            class="relative overflow-hidden
+            rounded-3xl
+            border border-purple-400/20
+            bg-gradient-to-br
+            from-purple-500/10
+            via-white/[0.03]
+            to-blue-500/10
+            p-8 sm:p-12"
+        >
+
+            <div class="max-w-3xl">
+
+                <div
+                    class="inline-flex items-center gap-2
+                    text-purple-300
+                    text-sm font-semibold mb-4"
+                >
+                    ✨ Oppvia AI
+                </div>
+
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+                    Let AI help you find the right opportunities.
+                </h2>
+
+                <p
+                    class="text-slate-400
+                    text-lg leading-relaxed mb-7"
+                >
+                    Tell Oppvia what you're studying, where you want to go,
+                    and what you're looking for. Our AI assistant will help
+                    you discover and understand opportunities that fit your
+                    goals.
+                </p>
+
+                <a
+                    href="/ai"
+                    class="op-btn op-btn-secondary"
+                    style="text-decoration:none;"
+                >
+                    Explore Oppvia AI →
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FINAL CTA -->
+    <section class="pb-24">
+
+        <div class="text-center">
+
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+                Your next opportunity could be here.
+            </h2>
+
+            <p class="text-slate-400 mb-7">
+                Start exploring opportunities from around the world.
+            </p>
+
+            <a
+                href="/opportunities"
+                class="op-btn op-btn-primary"
+                style="
+                    text-decoration:none;
+                    padding:13px 22px;
+                "
+            >
+                Explore Opportunities →
+            </a>
+
+        </div>
+
+    </section>
+
 </Layout>
