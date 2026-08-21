@@ -1,3 +1,4 @@
+```astro
 ---
 const navItems = [
     { linkText: 'Explore', href: '/' },
@@ -12,21 +13,21 @@ const navItems = [
         <div class="op-nav-inner">
 
             <!-- Brand -->
-            <a href="/" class="op-brand" style="text-decoration:none;">
+            <a href="/" class="op-brand" aria-label="Oppvia home">
                 <span class="op-brand-mark">O</span>
-                <span>ppvia</span>
+                <span>Oppvia</span>
             </a>
 
             <!-- Main navigation -->
             <nav aria-label="Main navigation">
                 <ul
                     style="
-                        display:flex;
-                        align-items:center;
-                        gap:6px;
-                        list-style:none;
-                        margin:0;
-                        padding:0;
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                        list-style: none;
+                        margin: 0;
+                        padding: 0;
                     "
                 >
                     {
@@ -35,13 +36,13 @@ const navItems = [
                                 <a
                                     href={item.href}
                                     style="
-                                        display:block;
-                                        padding:9px 12px;
-                                        border-radius:10px;
-                                        color:#94a3b8;
-                                        text-decoration:none;
-                                        font-size:14px;
-                                        font-weight:600;
+                                        display: block;
+                                        padding: 9px 12px;
+                                        border-radius: 10px;
+                                        color: #94a3b8;
+                                        text-decoration: none;
+                                        font-size: 14px;
+                                        font-weight: 600;
                                     "
                                 >
                                     {item.linkText}
@@ -54,143 +55,30 @@ const navItems = [
 
             <!-- Right side -->
             <div
-                id="auth-area"
                 style="
-                    display:flex;
-                    align-items:center;
-                    gap:10px;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
                 "
             >
                 <a
                     href="/ai"
                     class="op-btn op-btn-secondary"
-                    style="text-decoration:none;"
+                    style="text-decoration: none;"
                 >
                     ✨ AI Assistant
                 </a>
 
-                <!-- Temporary logged-out state -->
                 <a
-                    id="header-signin"
                     href="/login"
                     class="op-btn op-btn-primary"
-                    style="text-decoration:none;"
+                    style="text-decoration: none;"
                 >
                     Sign in
                 </a>
-
-                <a
-                    id="header-signup"
-                    href="/signup"
-                    class="op-btn op-btn-secondary"
-                    style="text-decoration:none;"
-                >
-                    Create account
-                </a>
-
-                <!-- Logged-in state -->
-                <a
-                    id="header-dashboard"
-                    href="/dashboard"
-                    class="op-btn op-btn-primary"
-                    style="
-                        text-decoration:none;
-                        display:none;
-                    "
-                >
-                    Account
-                </a>
-
-                <button
-                    id="header-signout"
-                    class="op-btn op-btn-secondary"
-                    type="button"
-                    style="display:none;"
-                >
-                    Sign out
-                </button>
             </div>
 
         </div>
     </div>
 </header>
-
-<script>
-    import { supabase } from '../lib/supabase';
-
-    const signIn =
-        document.getElementById('header-signin');
-
-    const signUp =
-        document.getElementById('header-signup');
-
-    const dashboard =
-        document.getElementById('header-dashboard');
-
-    const signOut =
-        document.getElementById('header-signout');
-
-    async function updateHeader() {
-
-        const {
-            data: { user }
-        } = await supabase.auth.getUser();
-
-        if (user) {
-
-            const name =
-                user.user_metadata?.full_name ||
-                user.email ||
-                'Account';
-
-            if (signIn) {
-                signIn.style.display = 'none';
-            }
-
-            if (signUp) {
-                signUp.style.display = 'none';
-            }
-
-            if (dashboard) {
-                dashboard.textContent = name;
-                dashboard.style.display = 'inline-flex';
-            }
-
-            if (signOut) {
-                signOut.style.display = 'inline-flex';
-            }
-
-        } else {
-
-            if (signIn) {
-                signIn.style.display = 'inline-flex';
-            }
-
-            if (signUp) {
-                signUp.style.display = 'inline-flex';
-            }
-
-            if (dashboard) {
-                dashboard.style.display = 'none';
-            }
-
-            if (signOut) {
-                signOut.style.display = 'none';
-            }
-        }
-    }
-
-    await updateHeader();
-
-    supabase.auth.onAuthStateChange(() => {
-        updateHeader();
-    });
-
-    signOut?.addEventListener('click', async () => {
-
-        await supabase.auth.signOut();
-
-        window.location.href = '/login';
-
-    });
-</script>
+```
