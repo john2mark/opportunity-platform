@@ -30,6 +30,8 @@ import Layout from '../../layouts/Layout.astro';
             </div>
         </div>
 
+        <!-- Access denied -->
+
         <div
             id="access-denied"
             class="hidden rounded-xl border border-red-400/20 bg-red-400/10 p-6 text-white"
@@ -50,10 +52,485 @@ import Layout from '../../layouts/Layout.astro';
             </a>
         </div>
 
+
+        <!-- Admin content -->
+
         <div id="admin-content" class="hidden">
 
+            <!-- Add opportunity form -->
+
+            <div
+                id="opportunity-form-container"
+                class="hidden mb-10 rounded-xl border border-white/10 bg-white/5 p-6"
+            >
+
+                <div class="mb-6">
+                    <h2 class="text-2xl font-semibold text-white">
+                        Add Opportunity
+                    </h2>
+
+                    <p class="text-white/60 mt-1">
+                        Create a new opportunity. New opportunities start as drafts.
+                    </p>
+                </div>
+
+
+                <form id="opportunity-form">
+
+                    <!-- Basic information -->
+
+                    <div class="mb-8">
+
+                        <h3 class="text-lg font-semibold text-white mb-4">
+                            Basic Information
+                        </h3>
+
+                        <div class="grid gap-5 md:grid-cols-2">
+
+                            <div class="md:col-span-2">
+                                <label class="block text-white/70 text-sm mb-2">
+                                    Opportunity title *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="Title"
+                                    required
+                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                    placeholder="e.g. DAAD Development-Related Postgraduate Courses"
+                                />
+                            </div>
+
+
+                            <div>
+                                <label class="block text-white/70 text-sm mb-2">
+                                    Institution *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="Institution"
+                                    required
+                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                    placeholder="University or organization"
+                                />
+                            </div>
+
+
+                            <div>
+                                <label class="block text-white/70 text-sm mb-2">
+                                    Opportunity type *
+                                </label>
+
+                                <select
+                                    name="Opportunity_type"
+                                    required
+                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                >
+                                    <option value="">Select type</option>
+                                    <option value="Scholarship">Scholarship</option>
+                                    <option value="Fellowship">Fellowship</option>
+                                    <option value="Research Position">Research Position</option>
+                                    <option value="Grant">Grant</option>
+                                    <option value="Internship">Internship</option>
+                                    <option value="Postdoctoral Position">Postdoctoral Position</option>
+                                    <option value="Conference">Conference</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+
+                            <div>
+                                <label class="block text-white/70 text-sm mb-2">
+                                    Academic level
+                                </label>
+
+                                <select
+                                    name="Academic_level"
+                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                >
+                                    <option value="">Select level</option>
+                                    <option value="Undergraduate">Undergraduate</option>
+                                    <option value="Masters">Masters</option>
+                                    <option value="PhD">PhD</option>
+                                    <option value="Postdoctoral">Postdoctoral</option>
+                                    <option value="Professional">Professional</option>
+                                    <option value="Any">Any</option>
+                                </select>
+                            </div>
+
+
+                            <div>
+                                <label class="block text-white/70 text-sm mb-2">
+                                    Discipline
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="Discipline"
+                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                    placeholder="e.g. Law, Chemistry, AI, Engineering"
+                                />
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <!-- Location -->
+
+                    <div class="mb-8">
+
+                        <h3 class="text-lg font-semibold text-white mb-4">
+                            Location
+                        </h3>
+
+                        <div class="grid gap-5 md:grid-cols-2">
+
+                            <div>
+                                <label class="block text-white/70 text-sm mb-2">
+                                    Country
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="Country"
+                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                    placeholder="e.g. Germany"
+                                />
+                            </div>
+
+
+                            <div>
+                                <label class="block text-white/70 text-sm mb-2">
+                                    City
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="City"
+                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                    placeholder="e.g. Berlin"
+                                />
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <!-- Deadline and funding -->
+
+                    <div class="mb-8">
+
+                        <h3 class="text-lg font-semibold text-white mb-4">
+                            Deadline & Funding
+                        </h3>
+
+                        <div class="grid gap-5 md:grid-cols-2">
+
+                            <div>
+                                <label class="block text-white/70 text-sm mb-2">
+                                    Deadline
+                                </label>
+
+                                <input
+                                    type="date"
+                                    name="Deadline"
+                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                />
+                            </div>
+
+
+                            <div>
+                                <label class="block text-white/70 text-sm mb-2">
+                                    Funding type
+                                </label>
+
+                                <select
+                                    name="Funding_type"
+                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                >
+                                    <option value="">Select funding</option>
+                                    <option value="Fully Funded">Fully Funded</option>
+                                    <option value="Partially Funded">Partially Funded</option>
+                                    <option value="Tuition Only">Tuition Only</option>
+                                    <option value="Stipend">Stipend</option>
+                                    <option value="Self Funded">Self Funded</option>
+                                    <option value="Varies">Varies</option>
+                                </select>
+                            </div>
+
+
+                            <label class="flex items-center gap-3 text-white/80">
+                                <input
+                                    type="checkbox"
+                                    name="Tuition_covered"
+                                    class="h-4 w-4"
+                                />
+                                Tuition covered
+                            </label>
+
+
+                            <label class="flex items-center gap-3 text-white/80">
+                                <input
+                                    type="checkbox"
+                                    name="Living_expenses_covered"
+                                    class="h-4 w-4"
+                                />
+                                Living expenses covered
+                            </label>
+
+
+                            <label class="flex items-center gap-3 text-white/80">
+                                <input
+                                    type="checkbox"
+                                    name="Travel_covered"
+                                    class="h-4 w-4"
+                                />
+                                Travel covered
+                            </label>
+
+
+                            <label class="flex items-center gap-3 text-white/80">
+                                <input
+                                    type="checkbox"
+                                    name="Accommodation_provided"
+                                    class="h-4 w-4"
+                                />
+                                Accommodation provided
+                            </label>
+
+                        </div>
+                    </div>
+
+
+                    <!-- Eligibility -->
+
+                    <div class="mb-8">
+
+                        <h3 class="text-lg font-semibold text-white mb-4">
+                            Eligibility & Requirements
+                        </h3>
+
+                        <div class="grid gap-5">
+
+                            <div>
+                                <label class="block text-white/70 text-sm mb-2">
+                                    Eligibility summary
+                                </label>
+
+                                <textarea
+                                    name="Eligibility_summary"
+                                    rows="4"
+                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                    placeholder="Who can apply?"
+                                ></textarea>
+                            </div>
+
+
+                            <div>
+                                <label class="block text-white/70 text-sm mb-2">
+                                    Nationality requirement
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="Nationality_requirement"
+                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                    placeholder="e.g. Open to all nationalities"
+                                />
+                            </div>
+
+
+                            <div class="grid gap-5 md:grid-cols-2">
+
+                                <label class="flex items-center gap-3 text-white/80">
+                                    <input
+                                        type="checkbox"
+                                        name="Transcript_accepted"
+                                        class="h-4 w-4"
+                                    />
+                                    Transcript accepted at application
+                                </label>
+
+
+                                <label class="flex items-center gap-3 text-white/80">
+                                    <input
+                                        type="checkbox"
+                                        name="Degree_required_at_application"
+                                        class="h-4 w-4"
+                                    />
+                                    Degree required at application
+                                </label>
+
+                            </div>
+
+
+                            <div>
+                                <label class="block text-white/70 text-sm mb-2">
+                                    English requirement
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="English_requirement"
+                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                    placeholder="e.g. IELTS 6.5 or equivalent"
+                                />
+                            </div>
+
+
+                            <div>
+                                <label class="block text-white/70 text-sm mb-2">
+                                    Documents summary
+                                </label>
+
+                                <textarea
+                                    name="Documents_summary"
+                                    rows="4"
+                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                    placeholder="Required application documents"
+                                ></textarea>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <!-- Application -->
+
+                    <div class="mb-8">
+
+                        <h3 class="text-lg font-semibold text-white mb-4">
+                            Application Information
+                        </h3>
+
+                        <div class="grid gap-5 md:grid-cols-2">
+
+                            <div class="md:col-span-2">
+                                <label class="block text-white/70 text-sm mb-2">
+                                    Official URL
+                                </label>
+
+                                <input
+                                    type="url"
+                                    name="Official_url"
+                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                    placeholder="https://..."
+                                />
+                            </div>
+
+
+                            <div>
+                                <label class="block text-white/70 text-sm mb-2">
+                                    Contact name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="Contact_name"
+                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                />
+                            </div>
+
+
+                            <div>
+                                <label class="block text-white/70 text-sm mb-2">
+                                    Contact email
+                                </label>
+
+                                <input
+                                    type="email"
+                                    name="Contact_email"
+                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                />
+                            </div>
+
+
+                            <div>
+                                <label class="block text-white/70 text-sm mb-2">
+                                    Relocation support
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="Relocation_support"
+                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                    placeholder="e.g. Available / Not provided"
+                                />
+                            </div>
+
+
+                            <div>
+                                <label class="block text-white/70 text-sm mb-2">
+                                    Visa information
+                                </label>
+
+                                <input
+                                    type="text"
+                                    name="Visa_information"
+                                    class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                                />
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <!-- Description -->
+
+                    <div class="mb-8">
+
+                        <h3 class="text-lg font-semibold text-white mb-4">
+                            Description
+                        </h3>
+
+                        <textarea
+                            name="Description"
+                            rows="7"
+                            class="w-full rounded-lg bg-white/10 border border-white/10 px-4 py-3 text-white"
+                            placeholder="Full opportunity description"
+                        ></textarea>
+
+                    </div>
+
+
+                    <div
+                        id="form-message"
+                        class="hidden mb-5 rounded-lg p-4 text-sm"
+                    ></div>
+
+
+                    <div class="flex gap-3">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            Create Draft
+                        </button>
+
+                        <button
+                            type="button"
+                            id="cancel-form"
+                            class="btn btn-outline text-white"
+                        >
+                            Cancel
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- Opportunities list -->
+
             <div class="rounded-xl border border-white/10 bg-white/5 p-6">
+
                 <div class="flex items-center justify-between mb-6">
+
                     <div>
                         <h2 class="text-2xl font-semibold text-white">
                             Opportunities
@@ -70,11 +547,14 @@ import Layout from '../../layouts/Layout.astro';
                     >
                         + Add Opportunity
                     </button>
+
                 </div>
+
 
                 <div id="loading" class="text-white/60">
                     Loading opportunities...
                 </div>
+
 
                 <div
                     id="empty-state"
@@ -83,13 +563,18 @@ import Layout from '../../layouts/Layout.astro';
                     No opportunities have been added yet.
                 </div>
 
+
                 <div
                     id="opportunities-container"
                     class="hidden overflow-x-auto"
                 >
+
                     <table class="w-full text-left">
+
                         <thead>
+
                             <tr class="border-b border-white/10">
+
                                 <th class="py-3 pr-4 text-white/60">
                                     Title
                                 </th>
@@ -109,20 +594,28 @@ import Layout from '../../layouts/Layout.astro';
                                 <th class="py-3 pr-4 text-white/60">
                                     Status
                                 </th>
+
                             </tr>
+
                         </thead>
 
                         <tbody id="opportunities-list"></tbody>
+
                     </table>
+
                 </div>
+
             </div>
 
         </div>
 
     </section>
 
+
     <script>
+
         import { supabase } from '../../lib/supabase';
+
 
         const adminStatus =
             document.getElementById('admin-status');
@@ -133,6 +626,31 @@ import Layout from '../../layouts/Layout.astro';
         const adminContent =
             document.getElementById('admin-content');
 
+        const opportunityFormContainer =
+            document.getElementById(
+                'opportunity-form-container'
+            );
+
+        const opportunityForm =
+            document.getElementById(
+                'opportunity-form'
+            );
+
+        const addOpportunityButton =
+            document.getElementById(
+                'add-opportunity'
+            );
+
+        const cancelForm =
+            document.getElementById(
+                'cancel-form'
+            );
+
+        const formMessage =
+            document.getElementById(
+                'form-message'
+            );
+
         const loading =
             document.getElementById('loading');
 
@@ -140,13 +658,14 @@ import Layout from '../../layouts/Layout.astro';
             document.getElementById('empty-state');
 
         const opportunitiesContainer =
-            document.getElementById('opportunities-container');
+            document.getElementById(
+                'opportunities-container'
+            );
 
         const opportunitiesList =
-            document.getElementById('opportunities-list');
-
-        const addOpportunityButton =
-            document.getElementById('add-opportunity');
+            document.getElementById(
+                'opportunities-list'
+            );
 
 
         async function checkAdminAccess() {
@@ -156,26 +675,33 @@ import Layout from '../../layouts/Layout.astro';
                 error: userError
             } = await supabase.auth.getUser();
 
+
             if (userError || !user) {
+
                 window.location.href = '/login';
+
                 return;
             }
 
 
-            const { data: role, error: roleError } =
-                await supabase
-                    .from('user_roles')
-                    .select('role')
-                    .eq('user_id', user.id)
-                    .eq('role', 'admin')
-                    .maybeSingle();
+            const {
+                data: role,
+                error: roleError
+            } = await supabase
+                .from('user_roles')
+                .select('role')
+                .eq('user_id', user.id)
+                .eq('role', 'admin')
+                .maybeSingle();
 
 
             if (roleError || !role) {
 
                 if (adminStatus) {
+
                     adminStatus.textContent =
                         'You do not have administrator access.';
+
                 }
 
                 accessDenied?.classList.remove('hidden');
@@ -185,13 +711,17 @@ import Layout from '../../layouts/Layout.astro';
 
 
             if (adminStatus) {
+
                 adminStatus.textContent =
                     `Signed in as ${user.email}`;
+
             }
+
 
             adminContent?.classList.remove('hidden');
 
             await loadOpportunities();
+
         }
 
 
@@ -203,7 +733,7 @@ import Layout from '../../layouts/Layout.astro';
             } = await supabase
                 .from('Opportunities')
                 .select(
-                    'Id, Title, Institution, Country, Deadline, Status'
+                    'Id, Title, Institution, Country, Deadline, Status, Created_at'
                 )
                 .order('Created_at', {
                     ascending: false
@@ -218,83 +748,377 @@ import Layout from '../../layouts/Layout.astro';
                 console.error(error);
 
                 if (emptyState) {
+
                     emptyState.textContent =
                         'Unable to load opportunities.';
+
                     emptyState.classList.remove('hidden');
+
                 }
 
                 return;
             }
 
 
-            if (!opportunities || opportunities.length === 0) {
+            if (
+                !opportunities ||
+                opportunities.length === 0
+            ) {
+
                 emptyState?.classList.remove('hidden');
+
                 return;
             }
 
 
-            opportunitiesContainer?.classList.remove('hidden');
+            opportunitiesContainer?.classList.remove(
+                'hidden'
+            );
 
 
-            opportunities.forEach((opportunity) => {
+            if (opportunitiesList) {
 
-                const row =
-                    document.createElement('tr');
+                opportunitiesList.innerHTML = '';
 
-                row.className =
-                    'border-b border-white/10';
+            }
 
 
-                row.innerHTML = `
-                    <td class="py-4 pr-4 text-white">
-                        ${escapeHtml(opportunity.Title || 'Untitled')}
-                    </td>
+            opportunities.forEach(
+                (opportunity) => {
 
-                    <td class="py-4 pr-4 text-white/70">
-                        ${escapeHtml(opportunity.Institution || '—')}
-                    </td>
+                    const row =
+                        document.createElement('tr');
 
-                    <td class="py-4 pr-4 text-white/70">
-                        ${escapeHtml(opportunity.Country || '—')}
-                    </td>
+                    row.className =
+                        'border-b border-white/10';
 
-                    <td class="py-4 pr-4 text-white/70">
-                        ${opportunity.Deadline || '—'}
-                    </td>
 
-                    <td class="py-4 pr-4">
-                        <span class="text-white/80">
-                            ${escapeHtml(opportunity.Status || '—')}
-                        </span>
-                    </td>
-                `;
+                    row.innerHTML = `
 
-                opportunitiesList?.appendChild(row);
-            });
+                        <td class="py-4 pr-4 text-white">
+                            ${escapeHtml(
+                                opportunity.Title ||
+                                'Untitled'
+                            )}
+                        </td>
+
+                        <td class="py-4 pr-4 text-white/70">
+                            ${escapeHtml(
+                                opportunity.Institution ||
+                                '—'
+                            )}
+                        </td>
+
+                        <td class="py-4 pr-4 text-white/70">
+                            ${escapeHtml(
+                                opportunity.Country ||
+                                '—'
+                            )}
+                        </td>
+
+                        <td class="py-4 pr-4 text-white/70">
+                            ${opportunity.Deadline || '—'}
+                        </td>
+
+                        <td class="py-4 pr-4">
+                            <span class="text-white/80">
+                                ${escapeHtml(
+                                    opportunity.Status ||
+                                    '—'
+                                )}
+                            </span>
+                        </td>
+
+                    `;
+
+
+                    opportunitiesList?.appendChild(
+                        row
+                    );
+
+                }
+            );
+
         }
 
 
         function escapeHtml(value) {
 
             return String(value)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
+                .replace(
+                    /&/g,
+                    '&amp;'
+                )
+                .replace(
+                    /</g,
+                    '&lt;'
+                )
+                .replace(
+                    />/g,
+                    '&gt;'
+                )
+                .replace(
+                    /"/g,
+                    '&quot;'
+                )
+                .replace(
+                    /'/g,
+                    '&#039;'
+                );
+
+        }
+
+
+        function showForm() {
+
+            opportunityFormContainer?.classList.remove(
+                'hidden'
+            );
+
+            opportunityFormContainer?.scrollIntoView({
+                behavior: 'smooth'
+            });
+
+        }
+
+
+        function hideForm() {
+
+            opportunityFormContainer?.classList.add(
+                'hidden'
+            );
+
+            opportunityForm?.reset();
+
+            if (formMessage) {
+
+                formMessage.classList.add(
+                    'hidden'
+                );
+
+            }
+
         }
 
 
         addOpportunityButton?.addEventListener(
             'click',
-            () => {
-                alert(
-                    'The Add Opportunity form will be added next.'
-                );
+            showForm
+        );
+
+
+        cancelForm?.addEventListener(
+            'click',
+            hideForm
+        );
+
+
+        opportunityForm?.addEventListener(
+            'submit',
+            async (event) => {
+
+                event.preventDefault();
+
+
+                const formData =
+                    new FormData(
+                        opportunityForm
+                    );
+
+
+                const opportunity = {
+
+                    Title:
+                        formData.get('Title'),
+
+                    Institution:
+                        formData.get('Institution'),
+
+                    Opportunity_type:
+                        formData.get(
+                            'Opportunity_type'
+                        ),
+
+                    Academic_level:
+                        formData.get(
+                            'Academic_level'
+                        ) || null,
+
+                    Discipline:
+                        formData.get(
+                            'Discipline'
+                        ) || null,
+
+                    Country:
+                        formData.get(
+                            'Country'
+                        ) || null,
+
+                    City:
+                        formData.get(
+                            'City'
+                        ) || null,
+
+                    Deadline:
+                        formData.get(
+                            'Deadline'
+                        ) || null,
+
+                    Funding_type:
+                        formData.get(
+                            'Funding_type'
+                        ) || null,
+
+                    Tuition_covered:
+                        formData.has(
+                            'Tuition_covered'
+                        ),
+
+                    Living_expenses_covered:
+                        formData.has(
+                            'Living_expenses_covered'
+                        ),
+
+                    Travel_covered:
+                        formData.has(
+                            'Travel_covered'
+                        ),
+
+                    Accommodation_provided:
+                        formData.has(
+                            'Accommodation_provided'
+                        ),
+
+                    Eligibility_summary:
+                        formData.get(
+                            'Eligibility_summary'
+                        ) || null,
+
+                    Nationality_requirement:
+                        formData.get(
+                            'Nationality_requirement'
+                        ) || null,
+
+                    Transcript_accepted:
+                        formData.has(
+                            'Transcript_accepted'
+                        ),
+
+                    Degree_required_at_application:
+                        formData.has(
+                            'Degree_required_at_application'
+                        ),
+
+                    Official_url:
+                        formData.get(
+                            'Official_url'
+                        ) || null,
+
+                    English_requirement:
+                        formData.get(
+                            'English_requirement'
+                        ) || null,
+
+                    Documents_summary:
+                        formData.get(
+                            'Documents_summary'
+                        ) || null,
+
+                    Contact_name:
+                        formData.get(
+                            'Contact_name'
+                        ) || null,
+
+                    Contact_email:
+                        formData.get(
+                            'Contact_email'
+                        ) || null,
+
+                    Relocation_support:
+                        formData.get(
+                            'Relocation_support'
+                        ) || null,
+
+                    Visa_information:
+                        formData.get(
+                            'Visa_information'
+                        ) || null,
+
+                    Description:
+                        formData.get(
+                            'Description'
+                        ) || null,
+
+                    Status:
+                        'draft'
+
+                };
+
+
+                if (formMessage) {
+
+                    formMessage.className =
+                        'mb-5 rounded-lg p-4 text-sm bg-white/10 text-white';
+
+                    formMessage.textContent =
+                        'Creating opportunity...';
+
+                    formMessage.classList.remove(
+                        'hidden'
+                    );
+
+                }
+
+
+                const {
+                    error
+                } = await supabase
+                    .from('Opportunities')
+                    .insert(
+                        opportunity
+                    );
+
+
+                if (error) {
+
+                    console.error(error);
+
+
+                    if (formMessage) {
+
+                        formMessage.className =
+                            'mb-5 rounded-lg p-4 text-sm bg-red-500/20 text-red-200';
+
+                        formMessage.textContent =
+                            error.message;
+
+                    }
+
+                    return;
+                }
+
+
+                if (formMessage) {
+
+                    formMessage.className =
+                        'mb-5 rounded-lg p-4 text-sm bg-green-500/20 text-green-200';
+
+                    formMessage.textContent =
+                        'Opportunity created successfully as a draft.';
+
+                }
+
+
+                opportunityForm?.reset();
+
+                await loadOpportunities();
+
             }
         );
 
 
         checkAdminAccess();
+
     </script>
+
 </Layout>
