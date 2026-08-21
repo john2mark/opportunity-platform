@@ -1,4 +1,3 @@
-```astro
 ---
 const navItems = [
     { linkText: 'Explore', href: '/' },
@@ -12,13 +11,11 @@ const navItems = [
     <div class="op-container">
         <div class="op-nav-inner">
 
-            <!-- Brand -->
             <a href="/" class="op-brand" aria-label="Oppvia home">
                 <span class="op-brand-mark">O</span>
                 <span>Oppvia</span>
             </a>
 
-            <!-- Main navigation -->
             <nav aria-label="Main navigation">
                 <ul
                     style="
@@ -30,30 +27,27 @@ const navItems = [
                         padding: 0;
                     "
                 >
-                    {
-                        navItems.map((item) => (
-                            <li>
-                                <a
-                                    href={item.href}
-                                    style="
-                                        display: block;
-                                        padding: 9px 12px;
-                                        border-radius: 10px;
-                                        color: #94a3b8;
-                                        text-decoration: none;
-                                        font-size: 14px;
-                                        font-weight: 600;
-                                    "
-                                >
-                                    {item.linkText}
-                                </a>
-                            </li>
-                        ))
-                    }
+                    {navItems.map((item) => (
+                        <li>
+                            <a
+                                href={item.href}
+                                style="
+                                    display: block;
+                                    padding: 9px 12px;
+                                    border-radius: 10px;
+                                    color: #94a3b8;
+                                    text-decoration: none;
+                                    font-size: 14px;
+                                    font-weight: 600;
+                                "
+                            >
+                                {item.linkText}
+                            </a>
+                        </li>
+                    ))}
                 </ul>
             </nav>
 
-            <!-- Right side -->
             <div
                 style="
                     display: flex;
@@ -81,4 +75,3 @@ const navItems = [
         </div>
     </div>
 </header>
-```
