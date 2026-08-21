@@ -1,10 +1,21 @@
 ---
+import { supabase } from '../lib/supabase';
+
 const navItems = [
     { linkText: 'Explore', href: '/' },
     { linkText: 'Opportunities', href: '/opportunities' },
     { linkText: 'Saved', href: '/saved' },
     { linkText: 'Applications', href: '/applications' }
 ];
+
+const {
+    data: { user }
+} = await supabase.auth.getUser();
+
+const displayName =
+    user?.user_metadata?.full_name ||
+    user?.email?.split('@')[0] ||
+    'Account';
 ---
 
 <header class="op-navbar">
@@ -12,12 +23,11 @@ const navItems = [
         <div class="op-nav-inner">
 
             <!-- Brand -->
-            <a href="/" class="op-brand">
+            <a href="/" class="op-brand" style="text-decoration:none;">
                 <span class="op-brand-mark">O</span>
 
                 <span>
-                    Opportunity
-                    <span style="color: #a78bfa;">Platform</span>
+                    Oppvia
                 </span>
             </a>
 
@@ -64,23 +74,76 @@ const navItems = [
                     gap: 10px;
                 "
             >
+
+                <!-- AI -->
                 <a
                     href="/ai"
                     class="op-btn op-btn-secondary"
-                    style="text-decoration: none;"
+                    style="text-decoration:none;"
                 >
                     ✨ AI Assistant
                 </a>
 
-                <a
-                    href="/login"
-                    class="op-btn op-btn-primary"
-                    style="text-decoration: none;"
-                >
-                    Sign in
-                </a>
+                {
+                    user ? (
+                        <>
+                            <a
+                                href="/dashboard"
+                                class="op-btn op-btn-primary"
+                                style="text-decoration:none;"
+                            >
+                                {displayName}
+                            </a>
+
+                            <button
+                                id="header-signout"
+                                class="op-btn op-btn-secondary"
+                                type="button"
+                            >
+                                Sign out
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <a
+                                href="/login"
+                                class="op-btn op-btn-primary"
+                                style="text-decoration:none;"
+                            >
+                                Sign in
+                            </a>
+
+                            <a
+                                href="/signup"
+                                class="op-btn op-btn-secondary"
+                                style="text-decoration:none;"
+                            >
+                                Create account
+                            </a>
+                        </>
+                    )
+                }
+
             </div>
 
         </div>
     </div>
 </header>
+
+<script>
+    import { supabase } from '../lib/supabase';
+
+    const signOutButton =
+        document.getElementById('header-signout');
+
+    signOutButton?.addEventListener(
+        'click',
+        async () => {
+
+            await supabase.auth.signOut();
+
+            window.location.href = '/login';
+
+        }
+    );
+</script>
