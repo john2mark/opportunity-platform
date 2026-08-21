@@ -1,9 +1,214 @@
----
+<footer
+    style="
+        margin-top: 80px;
+        border-top: 1px solid rgba(255,255,255,0.08);
+        background: rgba(7,11,20,0.65);
+    "
+>
+    <div class="op-container" style="padding: 48px 0 28px;">
 
----
+        <div
+            style="
+                display: grid;
+                grid-template-columns: 2fr repeat(3, 1fr);
+                gap: 40px;
+            "
+        >
 
-<footer class="pt-16 pb-12 sm:pt-24 sm:pb-16">
-    <p class="text-sm">
-        <a href="https://docs.netlify.com/frameworks/astro/" class="decoration-dashed text-primary underline-offset-8"> Astro on Netlify </a>
-    </p>
+            <!-- Brand -->
+            <div>
+                <a
+                    href="/"
+                    class="op-brand"
+                    style="display:inline-flex; text-decoration:none;"
+                >
+                    <span class="op-brand-mark">
+                        O
+                    </span>
+
+                    <span>
+                        Oppvia
+                    </span>
+                </a>
+
+                <p
+                    style="
+                        max-width: 340px;
+                        margin-top: 16px;
+                        color: #94a3b8;
+                        font-size: 14px;
+                        line-height: 1.7;
+                    "
+                >
+                    Discover opportunities that move your
+                    education, research, and career forward.
+                </p>
+            </div>
+
+            <!-- Explore -->
+            <div>
+                <h3
+                    style="
+                        margin-bottom: 14px;
+                        color: #f8fafc;
+                        font-size: 14px;
+                        font-weight: 700;
+                    "
+                >
+                    Explore
+                </h3>
+
+                <div style="display:grid; gap:10px;">
+                    <a href="/opportunities" class="op-footer-link">
+                        Opportunities
+                    </a>
+
+                    <a href="/opportunities?type=Scholarship" class="op-footer-link">
+                        Scholarships
+                    </a>
+
+                    <a href="/opportunities?type=Fellowship" class="op-footer-link">
+                        Fellowships
+                    </a>
+
+                    <a href="/opportunities?type=Research%20Position" class="op-footer-link">
+                        Research Positions
+                    </a>
+                </div>
+            </div>
+
+            <!-- Platform -->
+            <div>
+                <h3
+                    style="
+                        margin-bottom: 14px;
+                        color: #f8fafc;
+                        font-size: 14px;
+                        font-weight: 700;
+                    "
+                >
+                    Platform
+                </h3>
+
+                <div style="display:grid; gap:10px;">
+                    <a href="/ai" class="op-footer-link">
+                        AI Assistant
+                    </a>
+
+                    <a href="/saved" class="op-footer-link">
+                        Saved Opportunities
+                    </a>
+
+                    <a href="/applications" class="op-footer-link">
+                        Applications
+                    </a>
+
+                    <a href="/alerts" class="op-footer-link">
+                        Alerts
+                    </a>
+                </div>
+            </div>
+
+            <!-- Support -->
+            <div>
+                <h3
+                    style="
+                        margin-bottom: 14px;
+                        color: #f8fafc;
+                        font-size: 14px;
+                        font-weight: 700;
+                    "
+                >
+                    Support
+                </h3>
+
+                <div style="display:grid; gap:10px;">
+                    <a href="/help" class="op-footer-link">
+                        Help Center
+                    </a>
+
+                    <a href="/contact" class="op-footer-link">
+                        Contact
+                    </a>
+
+                    <a href="/report" class="op-footer-link">
+                        Report an Opportunity
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Bottom -->
+        <div
+            style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:20px;
+                flex-wrap:wrap;
+                margin-top:48px;
+                padding-top:20px;
+                border-top:1px solid rgba(255,255,255,0.06);
+            "
+        >
+
+            <p
+                style="
+                    margin:0;
+                    color:#64748b;
+                    font-size:13px;
+                "
+            >
+                © {new Date().getFullYear()} Oppvia. All rights reserved.
+            </p>
+
+            <div
+                style="
+                    display:flex;
+                    gap:18px;
+                    flex-wrap:wrap;
+                "
+            >
+                <a href="/privacy" class="op-footer-link">
+                    Privacy
+                </a>
+
+                <a href="/terms" class="op-footer-link">
+                    Terms
+                </a>
+
+                <a href="/cookies" class="op-footer-link">
+                    Cookies
+                </a>
+            </div>
+
+        </div>
+
+    </div>
 </footer>
+
+<style>
+    .op-footer-link {
+        color: #94a3b8;
+        text-decoration: none;
+        font-size: 13px;
+        transition: color 180ms ease;
+    }
+
+    .op-footer-link:hover {
+        color: #c4b5fd;
+    }
+
+    @media (max-width: 768px) {
+        .op-container > div:first-child {
+            grid-template-columns: 1fr 1fr !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .op-container > div:first-child {
+            grid-template-columns: 1fr !important;
+        }
+    }
+</style>
