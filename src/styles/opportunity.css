@@ -1,0 +1,558 @@
+/* =========================================================
+   OPPORTUNITY PLATFORM — DESIGN SYSTEM
+   Shared foundation for User + Admin experiences
+   ========================================================= */
+
+:root {
+    /* Backgrounds */
+    --op-bg: #070b14;
+    --op-bg-soft: #0b1120;
+    --op-surface: #101827;
+    --op-surface-hover: #151f32;
+    --op-surface-elevated: #172238;
+
+    /* Borders */
+    --op-border: rgba(255, 255, 255, 0.08);
+    --op-border-strong: rgba(255, 255, 255, 0.14);
+
+    /* Text */
+    --op-text: #f8fafc;
+    --op-text-soft: #cbd5e1;
+    --op-text-muted: #94a3b8;
+
+    /* Brand */
+    --op-primary: #8b5cf6;
+    --op-primary-hover: #7c3aed;
+    --op-primary-soft: rgba(139, 92, 246, 0.14);
+
+    /* Supporting accent */
+    --op-accent: #38bdf8;
+    --op-accent-soft: rgba(56, 189, 248, 0.12);
+
+    /* Status */
+    --op-success: #22c55e;
+    --op-success-soft: rgba(34, 197, 94, 0.12);
+
+    --op-warning: #f59e0b;
+    --op-warning-soft: rgba(245, 158, 11, 0.12);
+
+    --op-danger: #ef4444;
+    --op-danger-soft: rgba(239, 68, 68, 0.12);
+
+    --op-info: #3b82f6;
+    --op-info-soft: rgba(59, 130, 246, 0.12);
+
+    /* Radius */
+    --op-radius-sm: 8px;
+    --op-radius-md: 12px;
+    --op-radius-lg: 16px;
+    --op-radius-xl: 20px;
+
+    /* Shadows */
+    --op-shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.18);
+    --op-shadow-md: 0 12px 32px rgba(0, 0, 0, 0.24);
+    --op-shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.32);
+
+    /* Motion */
+    --op-transition: 180ms ease;
+}
+
+/* =========================================================
+   Base
+   ========================================================= */
+
+.op-app {
+    min-height: 100vh;
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(139, 92, 246, 0.10),
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at bottom left,
+            rgba(56, 189, 248, 0.06),
+            transparent 28%
+        ),
+        var(--op-bg);
+    color: var(--op-text);
+}
+
+/* =========================================================
+   Layout
+   ========================================================= */
+
+.op-container {
+    width: min(1400px, calc(100% - 32px));
+    margin: 0 auto;
+}
+
+.op-section {
+    padding: 32px 0;
+}
+
+.op-grid {
+    display: grid;
+    gap: 20px;
+}
+
+.op-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.op-grid-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.op-grid-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* =========================================================
+   Cards
+   ========================================================= */
+
+.op-card {
+    background: rgba(16, 24, 39, 0.88);
+    border: 1px solid var(--op-border);
+    border-radius: var(--op-radius-lg);
+    box-shadow: var(--op-shadow-sm);
+    backdrop-filter: blur(14px);
+}
+
+.op-card-hover {
+    transition:
+        transform var(--op-transition),
+        border-color var(--op-transition),
+        background var(--op-transition),
+        box-shadow var(--op-transition);
+}
+
+.op-card-hover:hover {
+    transform: translateY(-2px);
+    border-color: var(--op-border-strong);
+    background: var(--op-surface-hover);
+    box-shadow: var(--op-shadow-md);
+}
+
+/* =========================================================
+   Buttons
+   ========================================================= */
+
+.op-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 16px;
+    border-radius: var(--op-radius-md);
+    border: 1px solid transparent;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition:
+        background var(--op-transition),
+        border-color var(--op-transition),
+        transform var(--op-transition),
+        box-shadow var(--op-transition);
+}
+
+.op-btn:hover {
+    transform: translateY(-1px);
+}
+
+.op-btn-primary {
+    background: var(--op-primary);
+    color: white;
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.24);
+}
+
+.op-btn-primary:hover {
+    background: var(--op-primary-hover);
+}
+
+.op-btn-secondary {
+    background: var(--op-surface);
+    color: var(--op-text);
+    border-color: var(--op-border-strong);
+}
+
+.op-btn-secondary:hover {
+    background: var(--op-surface-hover);
+}
+
+.op-btn-danger {
+    background: var(--op-danger-soft);
+    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.22);
+}
+
+/* =========================================================
+   Inputs
+   ========================================================= */
+
+.op-input,
+.op-select,
+.op-textarea {
+    width: 100%;
+    background: var(--op-surface);
+    color: var(--op-text);
+    border: 1px solid var(--op-border-strong);
+    border-radius: var(--op-radius-md);
+    outline: none;
+    transition:
+        border-color var(--op-transition),
+        box-shadow var(--op-transition),
+        background var(--op-transition);
+}
+
+.op-input,
+.op-select {
+    min-height: 46px;
+    padding: 0 14px;
+}
+
+.op-textarea {
+    min-height: 120px;
+    padding: 12px 14px;
+    resize: vertical;
+}
+
+.op-input::placeholder,
+.op-textarea::placeholder {
+    color: var(--op-text-muted);
+}
+
+.op-input:focus,
+.op-select:focus,
+.op-textarea:focus {
+    border-color: var(--op-primary);
+    box-shadow: 0 0 0 3px var(--op-primary-soft);
+    background: var(--op-surface-hover);
+}
+
+/* =========================================================
+   Labels
+   ========================================================= */
+
+.op-label {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--op-text-soft);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* =========================================================
+   Status badges
+   ========================================================= */
+
+.op-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.op-badge-draft {
+    background: var(--op-warning-soft);
+    color: #fbbf24;
+}
+
+.op-badge-review {
+    background: var(--op-info-soft);
+    color: #60a5fa;
+}
+
+.op-badge-published {
+    background: var(--op-success-soft);
+    color: #4ade80;
+}
+
+.op-badge-rejected {
+    background: var(--op-danger-soft);
+    color: #f87171;
+}
+
+.op-badge-expired {
+    background: rgba(148, 163, 184, 0.12);
+    color: var(--op-text-muted);
+}
+
+/* =========================================================
+   Tables
+   ========================================================= */
+
+.op-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--op-border);
+    border-radius: var(--op-radius-lg);
+}
+
+.op-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.op-table th {
+    padding: 14px 16px;
+    text-align: left;
+    background: rgba(255, 255, 255, 0.025);
+    color: var(--op-text-muted);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.op-table td {
+    padding: 16px;
+    border-top: 1px solid var(--op-border);
+    color: var(--op-text-soft);
+    font-size: 14px;
+}
+
+.op-table tbody tr {
+    transition: background var(--op-transition);
+}
+
+.op-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.025);
+}
+
+/* =========================================================
+   Navigation
+   ========================================================= */
+
+.op-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(7, 11, 20, 0.82);
+    border-bottom: 1px solid var(--op-border);
+    backdrop-filter: blur(18px);
+}
+
+.op-nav-inner {
+    min-height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.op-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--op-text);
+    text-decoration: none;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.op-brand-mark {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    background: linear-gradient(
+        135deg,
+        var(--op-primary),
+        var(--op-accent)
+    );
+    color: white;
+    font-weight: 900;
+}
+
+/* =========================================================
+   Sidebar
+   ========================================================= */
+
+.op-sidebar {
+    width: 250px;
+    min-height: calc(100vh - 68px);
+    background: rgba(11, 17, 32, 0.94);
+    border-right: 1px solid var(--op-border);
+}
+
+.op-sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 13px;
+    border-radius: var(--op-radius-md);
+    color: var(--op-text-muted);
+    text-decoration: none;
+    transition:
+        background var(--op-transition),
+        color var(--op-transition);
+}
+
+.op-sidebar-link:hover {
+    background: var(--op-primary-soft);
+    color: var(--op-text);
+}
+
+.op-sidebar-link.active {
+    background: var(--op-primary-soft);
+    color: #c4b5fd;
+}
+
+/* =========================================================
+   Dashboard statistics
+   ========================================================= */
+
+.op-stat {
+    padding: 20px;
+}
+
+.op-stat-label {
+    color: var(--op-text-muted);
+    font-size: 13px;
+}
+
+.op-stat-value {
+    margin-top: 8px;
+    color: var(--op-text);
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.op-stat-icon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: var(--op-primary-soft);
+    color: #c4b5fd;
+}
+
+/* =========================================================
+   Empty states
+   ========================================================= */
+
+.op-empty {
+    padding: 60px 24px;
+    text-align: center;
+    color: var(--op-text-muted);
+}
+
+.op-empty-title {
+    margin-bottom: 8px;
+    color: var(--op-text);
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   Loading
+   ========================================================= */
+
+.op-skeleton {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+}
+
+.op-skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.06),
+        transparent
+    );
+    animation: op-shimmer 1.4s infinite;
+}
+
+@keyframes op-shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* =========================================================
+   AI surfaces
+   ========================================================= */
+
+.op-ai-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(139, 92, 246, 0.22);
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(139, 92, 246, 0.16),
+            transparent 45%
+        ),
+        var(--op-surface);
+}
+
+.op-ai-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #c4b5fd;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+
+@media (max-width: 1024px) {
+    .op-grid-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .op-sidebar {
+        width: 220px;
+    }
+}
+
+@media (max-width: 768px) {
+    .op-container {
+        width: min(100% - 24px, 1400px);
+    }
+
+    .op-grid-2,
+    .op-grid-3,
+    .op-grid-4 {
+        grid-template-columns: 1fr;
+    }
+
+    .op-sidebar {
+        display: none;
+    }
+
+    .op-nav-inner {
+        min-height: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .op-section {
+        padding: 24px 0;
+    }
+
+    .op-btn {
+        width: 100%;
+    }
+}
