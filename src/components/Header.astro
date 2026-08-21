@@ -1,30 +1,86 @@
 ---
-import Logo from '../components/Logo.astro';
-
 const navItems = [
-    { linkText: 'Home', href: '/' },
-    { linkText: 'Revalidation', href: '/revalidation' },
-    { linkText: 'Image CDN', href: '/image-cdn' },
-    { linkText: 'Edge Function', href: '/edge' },
-    { linkText: 'Blobs', href: '/blobs' }
+    { linkText: 'Explore', href: '/' },
+    { linkText: 'Opportunities', href: '/opportunities' },
+    { linkText: 'Saved', href: '/saved' },
+    { linkText: 'Applications', href: '/applications' }
 ];
 ---
 
-<nav class="flex flex-wrap items-center gap-4 pt-6 pb-16 sm:pt-12 sm:pb-24">
-    <a href="/">
-        <Logo />
-    </a>
-    {
-        !!navItems?.length && (
-            <ul class="flex flex-wrap gap-x-4 gap-y-1">
-                {navItems.map((item) => (
-                    <li>
-                        <a href={item.href} class="inline-block px-1.5 py-1 sm:px-3 sm:py-2">
-                            {item.linkText}
-                        </a>
-                    </li>
-                ))}
-            </ul>
-        )
-    }
-</nav>
+<header class="op-navbar">
+    <div class="op-container">
+        <div class="op-nav-inner">
+
+            <!-- Brand -->
+            <a href="/" class="op-brand">
+                <span class="op-brand-mark">O</span>
+
+                <span>
+                    Opportunity
+                    <span style="color: #a78bfa;">Platform</span>
+                </span>
+            </a>
+
+            <!-- Main navigation -->
+            <nav aria-label="Main navigation">
+                <ul
+                    style="
+                        display: flex;
+                        align-items: center;
+                        gap: 6px;
+                        list-style: none;
+                        margin: 0;
+                        padding: 0;
+                    "
+                >
+                    {
+                        navItems.map((item) => (
+                            <li>
+                                <a
+                                    href={item.href}
+                                    style="
+                                        display: block;
+                                        padding: 9px 12px;
+                                        border-radius: 10px;
+                                        color: #94a3b8;
+                                        text-decoration: none;
+                                        font-size: 14px;
+                                        font-weight: 600;
+                                    "
+                                >
+                                    {item.linkText}
+                                </a>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </nav>
+
+            <!-- Right side -->
+            <div
+                style="
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                "
+            >
+                <a
+                    href="/ai"
+                    class="op-btn op-btn-secondary"
+                    style="text-decoration: none;"
+                >
+                    ✨ AI Assistant
+                </a>
+
+                <a
+                    href="/login"
+                    class="op-btn op-btn-primary"
+                    style="text-decoration: none;"
+                >
+                    Sign in
+                </a>
+            </div>
+
+        </div>
+    </div>
+</header>
