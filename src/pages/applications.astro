@@ -1,62 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { supabase } from '../lib/supabase';
-
-const {
-    data: {
-        user
-    }
-} = await supabase.auth.getUser();
-
-let applications = [];
-let error = null;
-
-if (user) {
-    const result = await supabase
-        .from('applications')
-        .select(`
-            id,
-            opportunity_id,
-            application_cycle_id,
-            status,
-            applied_at,
-            deadline_at_application,
-            application_url,
-            notes,
-            outcome,
-            outcome_date,
-            created_at,
-            Opportunities (
-                Id,
-                Title,
-                Institution,
-                Opportunity_type,
-                Academic_level,
-                Discipline,
-                Country,
-                City,
-                Deadline,
-                Funding_type,
-                Verification_status,
-                Official_url
-            ),
-            Application_cycles (
-                id,
-                Cycle_name,
-                Application_open_date,
-                Application_deadline,
-                Status,
-                Application_url
-            )
-        `)
-        .eq('user_id', user.id)
-        .order('created_at', {
-            ascending: false
-        });
-
-    applications = result.data ?? [];
-    error = result.error;
-}
 ---
 
 <Layout title="Applications — Oppvia">
@@ -95,532 +38,1081 @@ if (user) {
         </div>
 
 
+        <!-- LOADING STATE -->
+        <div
+            id="loading-state"
+            class="rounded-3xl
+            border border-white/10
+            bg-white/[0.04]
+            backdrop-blur-xl
+            p-8 sm:p-10
+            text-center"
+        >
+
+            <div class="text-5xl mb-5">
+                ⏳
+            </div>
+
+            <h2
+                class="text-2xl
+                font-bold mb-3"
+            >
+                Loading your applications...
+            </h2>
+
+            <p class="text-slate-400">
+                Please wait a moment.
+            </p>
+
+        </div>
+
+
         <!-- NOT SIGNED IN -->
-        {
-            !user && (
-                <div
-                    class="rounded-3xl
-                    border border-white/10
-                    bg-white/[0.04]
-                    backdrop-blur-xl
-                    p-8 sm:p-10
-                    text-center"
-                >
+        <div
+            id="not-signed-in"
+            class="hidden
+            rounded-3xl
+            border border-white/10
+            bg-white/[0.04]
+            backdrop-blur-xl
+            p-8 sm:p-10
+            text-center"
+        >
 
-                    <div class="text-5xl mb-5">
-                        🔐
-                    </div>
+            <div class="text-5xl mb-5">
+                🔐
+            </div>
 
-                    <h2
-                        class="text-2xl
-                        font-bold mb-3"
-                    >
-                        Sign in to manage your applications
-                    </h2>
+            <h2
+                class="text-2xl
+                font-bold mb-3"
+            >
+                Sign in to manage your applications
+            </h2>
 
-                    <p
-                        class="text-slate-400
-                        max-w-lg
-                        mx-auto mb-6"
-                    >
-                        Your applications are connected to your
-                        account, so you can track them whenever
-                        you return to Oppvia.
-                    </p>
+            <p
+                class="text-slate-400
+                max-w-lg
+                mx-auto mb-6"
+            >
+                Your applications are connected to your account,
+                so you can track them whenever you return to Oppvia.
+            </p>
 
-                    <a
-                        href="/login"
-                        class="op-btn op-btn-primary"
-                        style="text-decoration:none;"
-                    >
-                        Sign in
-                    </a>
+            <a
+                href="/login"
+                class="op-btn op-btn-primary"
+                style="text-decoration:none;"
+            >
+                Sign in
+            </a>
 
-                </div>
-            )
-        }
+        </div>
 
 
         <!-- DATABASE ERROR -->
-        {
-            user && error && (
-                <div
-                    class="rounded-2xl
-                    border border-red-400/20
-                    bg-red-500/10
-                    p-6"
-                >
+        <div
+            id="database-error"
+            class="hidden
+            rounded-2xl
+            border border-red-400/20
+            bg-red-500/10
+            p-6"
+        >
 
-                    <h2
-                        class="font-bold
-                        text-red-300 mb-2"
-                    >
-                        Unable to load applications
+            <h2
+                class="font-bold
+                text-red-300 mb-2"
+            >
+                Unable to load applications
+            </h2>
+
+            <p
+                id="database-error-message"
+                class="text-red-200/70 text-sm"
+            >
+                Please try again later.
+            </p>
+
+        </div>
+
+
+        <!-- APPLICATIONS CONTENT -->
+        <div id="applications-content" class="hidden">
+
+            <!-- RESULT HEADER -->
+            <div
+                class="flex flex-col
+                sm:flex-row
+                sm:items-end
+                sm:justify-between
+                gap-3 mb-6"
+            >
+
+                <div>
+
+                    <h2 class="text-xl font-bold">
+                        Your applications
                     </h2>
 
-                    <p class="text-red-200/70 text-sm">
-                        Please try again later.
+                    <p
+                        id="application-count"
+                        class="text-sm
+                        text-slate-500 mt-1"
+                    >
+                        0 applications
                     </p>
 
                 </div>
-            )
+
+            </div>
+
+
+            <!-- APPLICATION LIST -->
+            <div
+                id="application-list"
+                class="grid grid-cols-1
+                lg:grid-cols-2
+                gap-6"
+            >
+            </div>
+
+
+            <!-- EMPTY STATE -->
+            <div
+                id="empty-state"
+                class="hidden
+                rounded-3xl
+                border border-white/10
+                bg-white/[0.04]
+                backdrop-blur-xl
+                p-8 sm:p-12
+                text-center"
+            >
+
+                <div class="text-5xl mb-5">
+                    📋
+                </div>
+
+                <h2
+                    class="text-2xl
+                    font-bold mb-3"
+                >
+                    No applications yet
+                </h2>
+
+                <p
+                    class="text-slate-400
+                    max-w-lg
+                    mx-auto mb-6"
+                >
+                    When you start tracking an opportunity,
+                    it will appear here so you can monitor
+                    your application progress.
+                </p>
+
+                <a
+                    href="/opportunities"
+                    class="op-btn op-btn-primary"
+                    style="text-decoration:none;"
+                >
+                    Explore opportunities →
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- APPLICATION AUTH + DATA -->
+    <script>
+
+        import { supabase } from '../lib/supabase';
+
+
+        const loadingState =
+            document.getElementById(
+                'loading-state'
+            );
+
+
+        const notSignedIn =
+            document.getElementById(
+                'not-signed-in'
+            );
+
+
+        const databaseError =
+            document.getElementById(
+                'database-error'
+            );
+
+
+        const databaseErrorMessage =
+            document.getElementById(
+                'database-error-message'
+            );
+
+
+        const applicationsContent =
+            document.getElementById(
+                'applications-content'
+            );
+
+
+        const applicationList =
+            document.getElementById(
+                'application-list'
+            );
+
+
+        const applicationCount =
+            document.getElementById(
+                'application-count'
+            );
+
+
+        const emptyState =
+            document.getElementById(
+                'empty-state'
+            );
+
+
+        function hideLoading() {
+
+            loadingState?.classList.add(
+                'hidden'
+            );
+
         }
 
 
-        <!-- APPLICATIONS -->
-        {
-            user &&
-            !error &&
-            applications.length > 0 && (
-                <>
-                    <div
-                        class="flex flex-col
-                        sm:flex-row
-                        sm:items-end
-                        sm:justify-between
-                        gap-3 mb-6"
-                    >
+        function escapeHtml(value) {
 
-                        <div>
+            if (value === null || value === undefined) {
+                return '';
+            }
 
-                            <h2 class="text-xl font-bold">
-                                Your applications
-                            </h2>
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
 
-                            <p
-                                class="text-sm
-                                text-slate-500 mt-1"
+        }
+
+
+        function formatDate(dateValue) {
+
+            if (!dateValue) {
+                return '';
+            }
+
+            const date =
+                new Date(
+                    `${dateValue}T00:00:00`
+                );
+
+            if (Number.isNaN(date.getTime())) {
+                return escapeHtml(dateValue);
+            }
+
+            return date.toLocaleDateString(
+                'en-US',
+                {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                }
+            );
+
+        }
+
+
+        function getRelatedRecord(record) {
+
+            if (Array.isArray(record)) {
+                return record[0] ?? null;
+            }
+
+            return record ?? null;
+
+        }
+
+
+        function showDatabaseError(error) {
+
+            hideLoading();
+
+            applicationsContent?.classList.add(
+                'hidden'
+            );
+
+            databaseError?.classList.remove(
+                'hidden'
+            );
+
+            if (databaseErrorMessage) {
+
+                databaseErrorMessage.textContent =
+                    error?.message ||
+                    'Please try again later.';
+
+            }
+
+            console.error(
+                'Unable to load applications:',
+                error
+            );
+
+        }
+
+
+        function renderApplications(applications) {
+
+            hideLoading();
+
+            applicationsContent?.classList.remove(
+                'hidden'
+            );
+
+
+            if (applicationCount) {
+
+                applicationCount.textContent =
+                    `${applications.length} ${
+                        applications.length === 1
+                            ? 'application'
+                            : 'applications'
+                    }`;
+
+            }
+
+
+            if (!applications.length) {
+
+                applicationList?.classList.add(
+                    'hidden'
+                );
+
+                emptyState?.classList.remove(
+                    'hidden'
+                );
+
+                return;
+
+            }
+
+
+            emptyState?.classList.add(
+                'hidden'
+            );
+
+            applicationList?.classList.remove(
+                'hidden'
+            );
+
+
+            if (!applicationList) {
+                return;
+            }
+
+
+            applicationList.innerHTML =
+                applications
+                    .map((application) => {
+
+                        const opportunity =
+                            getRelatedRecord(
+                                application.Opportunities
+                            );
+
+
+                        const cycle =
+                            getRelatedRecord(
+                                application.Application_cycles
+                            );
+
+
+                        if (!opportunity) {
+                            return '';
+                        }
+
+
+                        const deadline =
+                            cycle?.Application_deadline ??
+                            application.deadline_at_application ??
+                            opportunity.Deadline;
+
+
+                        const applicationUrl =
+                            application.application_url ??
+                            cycle?.Application_url ??
+                            opportunity.Official_url;
+
+
+                        const status =
+                            application.status ??
+                            'Not specified';
+
+
+                        const statusLower =
+                            String(status)
+                                .toLowerCase();
+
+
+                        let statusClass =
+                            'bg-purple-500/10 border-purple-400/20 text-purple-300';
+
+
+                        if (
+                            statusLower.includes('accepted') ||
+                            statusLower.includes('successful') ||
+                            statusLower.includes('approved')
+                        ) {
+
+                            statusClass =
+                                'bg-emerald-500/10 border-emerald-400/20 text-emerald-300';
+
+                        } else if (
+                            statusLower.includes('rejected') ||
+                            statusLower.includes('unsuccessful')
+                        ) {
+
+                            statusClass =
+                                'bg-red-500/10 border-red-400/20 text-red-300';
+
+                        } else if (
+                            statusLower.includes('submitted') ||
+                            statusLower.includes('applied')
+                        ) {
+
+                            statusClass =
+                                'bg-blue-500/10 border-blue-400/20 text-blue-300';
+
+                        }
+
+
+                        return `
+                            <article
+                                class="application-card
+                                rounded-2xl
+                                border border-white/10
+                                bg-white/[0.04]
+                                p-6
+                                transition
+                                hover:border-purple-400/30
+                                hover:bg-white/[0.06]"
+                                data-application-id="${escapeHtml(application.id)}"
                             >
-                                {applications.length}
-                                {
-                                    applications.length === 1
-                                        ? ' application'
-                                        : ' applications'
+
+                                <!-- HEADER -->
+                                <div
+                                    class="flex
+                                    items-start
+                                    justify-between
+                                    gap-4 mb-5"
+                                >
+
+                                    <div class="flex-1">
+
+                                        <p
+                                            class="text-sm
+                                            text-purple-300
+                                            font-semibold mb-2"
+                                        >
+                                            ${escapeHtml(
+                                                opportunity.Opportunity_type ??
+                                                'Opportunity'
+                                            )}
+                                        </p>
+
+                                        <h3
+                                            class="text-xl
+                                            font-bold
+                                            leading-snug"
+                                        >
+                                            ${escapeHtml(
+                                                opportunity.Title ??
+                                                'Untitled opportunity'
+                                            )}
+                                        </h3>
+
+                                    </div>
+
+
+                                    ${
+                                        opportunity.Verification_status ===
+                                        'verified'
+                                            ? `
+                                                <span
+                                                    class="shrink-0
+                                                    text-xs
+                                                    font-semibold
+                                                    px-2.5 py-1
+                                                    rounded-full
+                                                    bg-emerald-500/10
+                                                    border
+                                                    border-emerald-400/20
+                                                    text-emerald-300"
+                                                >
+                                                    ✓ Verified
+                                                </span>
+                                            `
+                                            : ''
+                                    }
+
+                                </div>
+
+
+                                <!-- INSTITUTION -->
+                                ${
+                                    opportunity.Institution
+                                        ? `
+                                            <p
+                                                class="text-slate-300
+                                                font-medium mb-3"
+                                            >
+                                                ${escapeHtml(
+                                                    opportunity.Institution
+                                                )}
+                                            </p>
+                                        `
+                                        : ''
                                 }
-                            </p>
-
-                        </div>
-
-                    </div>
 
 
-                    <div
-                        class="grid grid-cols-1
-                        lg:grid-cols-2
-                        gap-6"
-                    >
-
-                        {
-                            applications.map((application) => {
-
-                                const opportunity =
-                                    Array.isArray(
-                                        application.Opportunities
-                                    )
-                                        ? application.Opportunities[0]
-                                        : application.Opportunities;
-
-                                const cycle =
-                                    Array.isArray(
-                                        application.Application_cycles
-                                    )
-                                        ? application.Application_cycles[0]
-                                        : application.Application_cycles;
-
-                                if (!opportunity) {
-                                    return null;
+                                <!-- LOCATION -->
+                                ${
+                                    opportunity.Country ||
+                                    opportunity.City
+                                        ? `
+                                            <p
+                                                class="text-slate-500
+                                                text-sm mb-4"
+                                            >
+                                                📍
+                                                ${
+                                                    opportunity.City
+                                                        ? `${escapeHtml(
+                                                              opportunity.City
+                                                          )}, `
+                                                        : ''
+                                                }
+                                                ${escapeHtml(
+                                                    opportunity.Country ?? ''
+                                                )}
+                                            </p>
+                                        `
+                                        : ''
                                 }
 
-                                const deadline =
-                                    cycle?.Application_deadline ??
-                                    application.deadline_at_application ??
-                                    opportunity.Deadline;
 
-                                const applicationUrl =
-                                    application.application_url ??
-                                    cycle?.Application_url ??
-                                    opportunity.Official_url;
+                                <!-- TAGS -->
+                                <div
+                                    class="flex
+                                    flex-wrap
+                                    gap-2 mb-5"
+                                >
 
-                                return (
-                                    <article
-                                        class="application-card
-                                        rounded-2xl
-                                        border border-white/10
-                                        bg-white/[0.04]
-                                        p-6
-                                        transition
-                                        hover:border-purple-400/30
-                                        hover:bg-white/[0.06]"
-                                        data-application-id={
-                                            application.id
-                                        }
+                                    ${
+                                        opportunity.Academic_level
+                                            ? `
+                                                <span
+                                                    class="text-xs
+                                                    font-medium
+                                                    px-2.5 py-1
+                                                    rounded-lg
+                                                    bg-blue-500/10
+                                                    border
+                                                    border-blue-400/20
+                                                    text-blue-300"
+                                                >
+                                                    ${escapeHtml(
+                                                        opportunity.Academic_level
+                                                    )}
+                                                </span>
+                                            `
+                                            : ''
+                                    }
+
+
+                                    ${
+                                        opportunity.Discipline
+                                            ? `
+                                                <span
+                                                    class="text-xs
+                                                    font-medium
+                                                    px-2.5 py-1
+                                                    rounded-lg
+                                                    bg-purple-500/10
+                                                    border
+                                                    border-purple-400/20
+                                                    text-purple-300"
+                                                >
+                                                    ${escapeHtml(
+                                                        opportunity.Discipline
+                                                    )}
+                                                </span>
+                                            `
+                                            : ''
+                                    }
+
+
+                                    ${
+                                        opportunity.Funding_type
+                                            ? `
+                                                <span
+                                                    class="text-xs
+                                                    font-medium
+                                                    px-2.5 py-1
+                                                    rounded-lg
+                                                    bg-cyan-500/10
+                                                    border
+                                                    border-cyan-400/20
+                                                    text-cyan-300"
+                                                >
+                                                    ${escapeHtml(
+                                                        opportunity.Funding_type
+                                                    )}
+                                                </span>
+                                            `
+                                            : ''
+                                    }
+
+                                </div>
+
+
+                                <!-- APPLICATION STATUS -->
+                                <div
+                                    class="border-t
+                                    border-white/10
+                                    pt-4 mb-4"
+                                >
+
+                                    <div
+                                        class="flex
+                                        items-center
+                                        justify-between
+                                        gap-4"
                                     >
 
-                                        <!-- HEADER -->
-                                        <div
-                                            class="flex
-                                            items-start
-                                            justify-between
-                                            gap-4 mb-5"
+                                        <span
+                                            class="text-sm
+                                            text-slate-500"
                                         >
+                                            Status
+                                        </span>
 
-                                            <div class="flex-1">
-
-                                                <p
-                                                    class="text-sm
-                                                    text-purple-300
-                                                    font-semibold mb-2"
-                                                >
-                                                    {
-                                                        opportunity.Opportunity_type ??
-                                                        'Opportunity'
-                                                    }
-                                                </p>
-
-                                                <h3
-                                                    class="text-xl
-                                                    font-bold
-                                                    leading-snug"
-                                                >
-                                                    {
-                                                        opportunity.Title ??
-                                                        'Untitled opportunity'
-                                                    }
-                                                </h3>
-
-                                            </div>
-
-
-                                            {
-                                                opportunity.Verification_status ===
-                                                    'verified' && (
-                                                    <span
-                                                        class="shrink-0
-                                                        text-xs
-                                                        font-semibold
-                                                        px-2.5 py-1
-                                                        rounded-full
-                                                        bg-emerald-500/10
-                                                        border
-                                                        border-emerald-400/20
-                                                        text-emerald-300"
-                                                    >
-                                                        ✓ Verified
-                                                    </span>
-                                                )
-                                            }
-
-                                        </div>
-
-
-                                        <!-- INSTITUTION -->
-                                        {
-                                            opportunity.Institution && (
-                                                <p
-                                                    class="text-slate-300
-                                                    font-medium mb-3"
-                                                >
-                                                    {
-                                                        opportunity.Institution
-                                                    }
-                                                </p>
-                                            )
-                                        }
-
-
-                                        <!-- LOCATION -->
-                                        {
-                                            (
-                                                opportunity.Country ||
-                                                opportunity.City
-                                            ) && (
-                                                <p
-                                                    class="text-slate-500
-                                                    text-sm mb-4"
-                                                >
-                                                    📍
-                                                    {
-                                                        opportunity.City
-                                                            ? `${opportunity.City}, `
-                                                            : ''
-                                                    }
-                                                    {
-                                                        opportunity.Country ??
-                                                        ''
-                                                    }
-                                                </p>
-                                            )
-                                        }
-
-
-                                        <!-- TAGS -->
-                                        <div
-                                            class="flex
-                                            flex-wrap
-                                            gap-2 mb-5"
+                                        <span
+                                            class="text-xs
+                                            font-semibold
+                                            px-3 py-1.5
+                                            rounded-full
+                                            border
+                                            ${statusClass}"
                                         >
+                                            ${escapeHtml(status)}
+                                        </span>
 
-                                            {
-                                                opportunity.Academic_level && (
-                                                    <span
-                                                        class="text-xs
-                                                        font-medium
-                                                        px-2.5 py-1
-                                                        rounded-lg
-                                                        bg-blue-500/10
-                                                        border
-                                                        border-blue-400/20
-                                                        text-blue-300"
-                                                    >
-                                                        {
-                                                            opportunity.Academic_level
-                                                        }
-                                                    </span>
-                                                )
-                                            }
+                                    </div>
+
+                                </div>
 
 
-                                            {
-                                                opportunity.Discipline && (
-                                                    <span
-                                                        class="text-xs
-                                                        font-medium
-                                                        px-2.5 py-1
-                                                        rounded-lg
-                                                        bg-purple-500/10
-                                                        border
-                                                        border-purple-400/20
-                                                        text-purple-300"
-                                                    >
-                                                        {
-                                                            opportunity.Discipline
-                                                        }
-                                                    </span>
-                                                )
-                                            }
-
-
-                                            {
-                                                opportunity.Funding_type && (
-                                                    <span
-                                                        class="text-xs
-                                                        font-medium
-                                                        px-2.5 py-1
-                                                        rounded-lg
-                                                        bg-cyan-500/10
-                                                        border
-                                                        border-cyan-400/20
-                                                        text-cyan-300"
-                                                    >
-                                                        {
-                                                            opportunity.Funding_type
-                                                        }
-                                                    </span>
-                                                )
-                                            }
-
-                                        </div>
-
-
-                                        <!-- APPLICATION STATUS -->
-                                        <div
-                                            class="border-t
-                                            border-white/10
-                                            pt-4 mb-4"
-                                        >
-
+                                <!-- DEADLINE -->
+                                ${
+                                    deadline
+                                        ? `
                                             <div
                                                 class="flex
                                                 items-center
                                                 justify-between
-                                                gap-4"
+                                                gap-4
+                                                border-t
+                                                border-white/10
+                                                pt-4 mb-5"
                                             >
 
                                                 <span
                                                     class="text-sm
                                                     text-slate-500"
                                                 >
-                                                    Status
+                                                    Deadline
                                                 </span>
 
                                                 <span
                                                     class="text-sm
                                                     font-semibold
-                                                    text-purple-300"
+                                                    text-slate-300"
                                                 >
-                                                    {
-                                                        application.status ??
-                                                        'Not specified'
-                                                    }
+                                                    ${formatDate(
+                                                        deadline
+                                                    )}
                                                 </span>
 
                                             </div>
+                                        `
+                                        : ''
+                                }
 
-                                        </div>
 
+                                <!-- CYCLE -->
+                                ${
+                                    cycle?.Cycle_name
+                                        ? `
+                                            <div
+                                                class="mb-5
+                                                rounded-xl
+                                                bg-white/[0.03]
+                                                border
+                                                border-white/10
+                                                p-4"
+                                            >
 
-                                        <!-- DEADLINE -->
-                                        {
-                                            deadline && (
-                                                <div
-                                                    class="flex
-                                                    items-center
-                                                    justify-between
-                                                    gap-4
-                                                    border-t
-                                                    border-white/10
-                                                    pt-4 mb-5"
+                                                <p
+                                                    class="text-xs
+                                                    font-semibold
+                                                    text-slate-500
+                                                    mb-1"
                                                 >
+                                                    Application cycle
+                                                </p>
 
-                                                    <span
-                                                        class="text-sm
-                                                        text-slate-500"
-                                                    >
-                                                        Deadline
-                                                    </span>
-
-                                                    <span
-                                                        class="text-sm
-                                                        font-semibold
-                                                        text-slate-300"
-                                                    >
-                                                        {
-                                                            new Date(
-                                                                deadline +
-                                                                    'T00:00:00'
-                                                            ).toLocaleDateString(
-                                                                'en-US',
-                                                                {
-                                                                    year: 'numeric',
-                                                                    month: 'short',
-                                                                    day: 'numeric'
-                                                                }
-                                                            )
-                                                        }
-                                                    </span>
-
-                                                </div>
-                                            )
-                                        }
-
-
-                                        <!-- NOTES -->
-                                        {
-                                            application.notes && (
-                                                <div
-                                                    class="mb-5
-                                                    rounded-xl
-                                                    bg-white/[0.03]
-                                                    border
-                                                    border-white/10
-                                                    p-4"
+                                                <p
+                                                    class="text-sm
+                                                    text-slate-300"
                                                 >
+                                                    ${escapeHtml(
+                                                        cycle.Cycle_name
+                                                    )}
+                                                </p>
 
-                                                    <p
-                                                        class="text-xs
-                                                        font-semibold
-                                                        text-slate-500
-                                                        mb-2"
-                                                    >
-                                                        Notes
-                                                    </p>
-
-                                                    <p
-                                                        class="text-sm
-                                                        text-slate-300"
-                                                    >
-                                                        {
-                                                            application.notes
-                                                        }
-                                                    </p>
-
-                                                </div>
-                                            )
-                                        }
+                                            </div>
+                                        `
+                                        : ''
+                                }
 
 
-                                        <!-- ACTIONS -->
-                                        <div
-                                            class="flex
-                                            flex-wrap
-                                            gap-3"
-                                        >
+                                <!-- NOTES -->
+                                ${
+                                    application.notes
+                                        ? `
+                                            <div
+                                                class="mb-5
+                                                rounded-xl
+                                                bg-white/[0.03]
+                                                border
+                                                border-white/10
+                                                p-4"
+                                            >
 
-                                            {
-                                                applicationUrl && (
-                                                    <a
-                                                        href={applicationUrl}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        class="op-btn
-                                                        op-btn-primary"
-                                                        style="text-decoration:none;"
-                                                    >
-                                                        Open application →
-                                                    </a>
-                                                )
-                                            }
+                                                <p
+                                                    class="text-xs
+                                                    font-semibold
+                                                    text-slate-500
+                                                    mb-2"
+                                                >
+                                                    Notes
+                                                </p>
 
-                                        </div>
+                                                <p
+                                                    class="text-sm
+                                                    text-slate-300"
+                                                >
+                                                    ${escapeHtml(
+                                                        application.notes
+                                                    )}
+                                                </p>
 
-                                    </article>
-                                );
-                            })
+                                            </div>
+                                        `
+                                        : ''
+                                }
+
+
+                                <!-- OUTCOME -->
+                                ${
+                                    application.outcome
+                                        ? `
+                                            <div
+                                                class="mb-5
+                                                rounded-xl
+                                                bg-white/[0.03]
+                                                border
+                                                border-white/10
+                                                p-4"
+                                            >
+
+                                                <p
+                                                    class="text-xs
+                                                    font-semibold
+                                                    text-slate-500
+                                                    mb-2"
+                                                >
+                                                    Outcome
+                                                </p>
+
+                                                <p
+                                                    class="text-sm
+                                                    text-slate-300"
+                                                >
+                                                    ${escapeHtml(
+                                                        application.outcome
+                                                    )}
+                                                </p>
+
+                                                ${
+                                                    application.outcome_date
+                                                        ? `
+                                                            <p
+                                                                class="text-xs
+                                                                text-slate-500
+                                                                mt-2"
+                                                            >
+                                                                ${formatDate(
+                                                                    application.outcome_date
+                                                                )}
+                                                            </p>
+                                                        `
+                                                        : ''
+                                                }
+
+                                            </div>
+                                        `
+                                        : ''
+                                }
+
+
+                                <!-- ACTIONS -->
+                                <div
+                                    class="flex
+                                    flex-wrap
+                                    gap-3"
+                                >
+
+                                    ${
+                                        applicationUrl
+                                            ? `
+                                                <a
+                                                    href="${escapeHtml(
+                                                        applicationUrl
+                                                    )}"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    class="op-btn
+                                                    op-btn-primary"
+                                                    style="text-decoration:none;"
+                                                >
+                                                    Open application →
+                                                </a>
+                                            `
+                                            : ''
+                                    }
+
+                                </div>
+
+                            </article>
+                        `;
+
+                    })
+                    .join('');
+
+        }
+
+
+        async function loadApplications() {
+
+            try {
+
+                /*
+                 * Get the browser's current Supabase session.
+                 * This is important because the user may already
+                 * be logged in even though Astro's server cannot
+                 * see that browser session.
+                 */
+
+                const {
+                    data: {
+                        session
+                    },
+                    error: sessionError
+                } = await supabase.auth.getSession();
+
+
+                if (sessionError) {
+
+                    showDatabaseError(
+                        sessionError
+                    );
+
+                    return;
+
+                }
+
+
+                if (!session?.user) {
+
+                    hideLoading();
+
+                    notSignedIn?.classList.remove(
+                        'hidden'
+                    );
+
+                    return;
+
+                }
+
+
+                const userId =
+                    session.user.id;
+
+
+                /*
+                 * Load only this user's applications.
+                 */
+
+                const {
+                    data: applications,
+                    error
+                } = await supabase
+                    .from('applications')
+                    .select(`
+                        id,
+                        opportunity_id,
+                        application_cycle_id,
+                        status,
+                        applied_at,
+                        deadline_at_application,
+                        application_url,
+                        notes,
+                        outcome,
+                        outcome_date,
+                        created_at,
+                        Opportunities (
+                            Id,
+                            Title,
+                            Institution,
+                            Opportunity_type,
+                            Academic_level,
+                            Discipline,
+                            Country,
+                            City,
+                            Deadline,
+                            Funding_type,
+                            Verification_status,
+                            Official_url
+                        ),
+                        Application_cycles (
+                            id,
+                            Cycle_name,
+                            Application_open_date,
+                            Application_deadline,
+                            Status,
+                            Application_url
+                        )
+                    `)
+                    .eq(
+                        'user_id',
+                        userId
+                    )
+                    .order(
+                        'created_at',
+                        {
+                            ascending: false
                         }
+                    );
 
-                    </div>
-                </>
-            )
+
+                if (error) {
+
+                    showDatabaseError(
+                        error
+                    );
+
+                    return;
+
+                }
+
+
+                renderApplications(
+                    applications ?? []
+                );
+
+            } catch (error) {
+
+                showDatabaseError(
+                    error
+                );
+
+            }
+
         }
 
 
-        <!-- EMPTY STATE -->
-        {
-            user &&
-            !error &&
-            applications.length === 0 && (
-                <div
-                    class="rounded-3xl
-                    border border-white/10
-                    bg-white/[0.04]
-                    backdrop-blur-xl
-                    p-8 sm:p-12
-                    text-center"
-                >
+        /*
+         * Initial load
+         */
+        loadApplications();
 
-                    <div class="text-5xl mb-5">
-                        📋
-                    </div>
 
-                    <h2
-                        class="text-2xl
-                        font-bold mb-3"
-                    >
-                        No applications yet
-                    </h2>
+        /*
+         * Keep the page synchronized if the user
+         * signs in or signs out while this page is open.
+         */
+        supabase.auth.onAuthStateChange(
+            async (event, session) => {
 
-                    <p
-                        class="text-slate-400
-                        max-w-lg
-                        mx-auto mb-6"
-                    >
-                        When you start tracking an opportunity,
-                        it will appear here so you can monitor
-                        your application progress.
-                    </p>
+                if (
+                    event === 'SIGNED_IN' &&
+                    session?.user
+                ) {
 
-                    <a
-                        href="/opportunities"
-                        class="op-btn op-btn-primary"
-                        style="text-decoration:none;"
-                    >
-                        Explore opportunities →
-                    </a>
+                    notSignedIn?.classList.add(
+                        'hidden'
+                    );
 
-                </div>
-            )
-        }
+                    databaseError?.classList.add(
+                        'hidden'
+                    );
 
-    </section>
+                    loadingState?.classList.remove(
+                        'hidden'
+                    );
+
+                    await loadApplications();
+
+                }
+
+
+                if (
+                    event === 'SIGNED_OUT'
+                ) {
+
+                    applicationsContent?.classList.add(
+                        'hidden'
+                    );
+
+                    databaseError?.classList.add(
+                        'hidden'
+                    );
+
+                    loadingState?.classList.add(
+                        'hidden'
+                    );
+
+                    notSignedIn?.classList.remove(
+                        'hidden'
+                    );
+
+                }
+
+            }
+        );
+
+    </script>
 
 </Layout>
