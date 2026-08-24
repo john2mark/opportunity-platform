@@ -28,16 +28,20 @@ const countries = [
 
             <div class="mb-4">
                 <span
-                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full
-                    bg-purple-500/10 border border-purple-400/20
-                    text-purple-200 text-sm font-semibold"
+                    class="inline-flex items-center gap-2
+                    px-4 py-2 rounded-full
+                    bg-purple-500/10
+                    border border-purple-400/20
+                    text-purple-200
+                    text-sm font-semibold"
                 >
                     ✨ Discover your next opportunity
                 </span>
             </div>
 
             <h1
-                class="text-4xl sm:text-5xl font-extrabold
+                class="text-4xl sm:text-5xl
+                font-extrabold
                 tracking-tight mb-4"
             >
                 Opportunities
@@ -328,7 +332,8 @@ const countries = [
 
             <!-- FILTER ACTIONS -->
             <div
-                class="flex flex-wrap items-center gap-3 mt-5"
+                class="flex flex-wrap
+                items-center gap-3 mt-5"
             >
 
                 <button
@@ -478,8 +483,7 @@ const countries = [
                                         px-2.5 py-1
                                         rounded-full
                                         bg-emerald-500/10
-                                        border
-                                        border-emerald-400/20
+                                        border border-emerald-400/20
                                         text-emerald-300"
                                     >
                                         ✓ Verified
@@ -535,8 +539,7 @@ const countries = [
                                         px-2.5 py-1
                                         rounded-lg
                                         bg-blue-500/10
-                                        border
-                                        border-blue-400/20
+                                        border border-blue-400/20
                                         text-blue-300"
                                     >
                                         {opportunity.Academic_level}
@@ -552,8 +555,7 @@ const countries = [
                                         px-2.5 py-1
                                         rounded-lg
                                         bg-purple-500/10
-                                        border
-                                        border-purple-400/20
+                                        border border-purple-400/20
                                         text-purple-300"
                                     >
                                         {opportunity.Discipline}
@@ -569,8 +571,7 @@ const countries = [
                                         px-2.5 py-1
                                         rounded-lg
                                         bg-cyan-500/10
-                                        border
-                                        border-cyan-400/20
+                                        border border-cyan-400/20
                                         text-cyan-300"
                                     >
                                         {opportunity.Funding_type}
@@ -644,6 +645,7 @@ const countries = [
                                 )
                             }
 
+
                             <button
                                 type="button"
                                 class="op-btn
@@ -652,6 +654,23 @@ const countries = [
                                 data-opportunity-id={opportunity.Id}
                             >
                                 ☆ Save
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="op-btn
+                                op-btn-secondary
+                                track-application"
+                                data-opportunity-id={opportunity.Id}
+                                data-opportunity-deadline={
+                                    opportunity.Deadline ?? ''
+                                }
+                                data-application-url={
+                                    opportunity.Official_url ?? ''
+                                }
+                            >
+                                📋 Track application
                             </button>
 
                         </div>
@@ -694,7 +713,7 @@ const countries = [
     </section>
 
 
-    <!-- CLIENT-SIDE SEARCH, FILTERING + SAVING -->
+    <!-- CLIENT-SIDE SEARCH, FILTERING, SAVING + APPLICATION TRACKING -->
     <script>
         import { supabase } from '../lib/supabase';
 
@@ -781,6 +800,14 @@ const countries = [
             Array.from(
                 document.querySelectorAll(
                     '.save-opportunity'
+                )
+            );
+
+
+        const trackButtons =
+            Array.from(
+                document.querySelectorAll(
+                    '.track-application'
                 )
             );
 
@@ -1045,8 +1072,41 @@ const countries = [
 
 
         /* =====================================================
-           LOAD SAVED OPPORTUNITIES
+           SAVED OPPORTUNITIES
         ===================================================== */
+
+        const setSavedState =
+            (
+                button: Element,
+                saved: boolean
+            ) => {
+
+                const htmlButton =
+                    button as HTMLButtonElement;
+
+
+                if (saved) {
+
+                    htmlButton.textContent =
+                        '✓ Saved';
+
+                    htmlButton.classList.add(
+                        'saved'
+                    );
+
+                } else {
+
+                    htmlButton.textContent =
+                        '☆ Save';
+
+                    htmlButton.classList.remove(
+                        'saved'
+                    );
+
+                }
+
+            };
+
 
         const loadSavedOpportunities =
             async () => {
@@ -1131,53 +1191,6 @@ const countries = [
 
             };
 
-
-        /* =====================================================
-           SAVE BUTTON STATE
-        ===================================================== */
-
-        const setSavedState =
-            (
-                button: Element,
-                saved: boolean
-            ) => {
-
-                const htmlButton =
-                    button as HTMLButtonElement;
-
-
-                if (saved) {
-
-                    htmlButton.textContent =
-                        '✓ Saved';
-
-                    htmlButton.classList.add(
-                        'saved'
-                    );
-
-                    htmlButton.style.opacity =
-                        '1';
-
-                } else {
-
-                    htmlButton.textContent =
-                        '☆ Save';
-
-                    htmlButton.classList.remove(
-                        'saved'
-                    );
-
-                    htmlButton.style.opacity =
-                        '1';
-
-                }
-
-            };
-
-
-        /* =====================================================
-           SAVE / REMOVE OPPORTUNITY
-        ===================================================== */
 
         const toggleSave =
             async (
@@ -1330,12 +1343,577 @@ const countries = [
 
 
         /* =====================================================
+           TRACKED APPLICATION STATE
+        ===================================================== */
+
+        const setTrackedState =
+            (
+                button: Element,
+                tracked: boolean
+            ) => {
+
+                const htmlButton =
+                    button as HTMLButtonElement;
+
+
+                if (tracked) {
+
+                    htmlButton.textContent =
+                        '✓ Tracked';
+
+                    htmlButton.classList.add(
+                        'tracked'
+                    );
+
+                } else {
+
+                    htmlButton.textContent =
+                        '📋 Track application';
+
+                    htmlButton.classList.remove(
+                        'tracked'
+                    );
+
+                }
+
+            };
+
+
+        /* =====================================================
+           LOAD EXISTING APPLICATIONS
+        ===================================================== */
+
+        const loadTrackedApplications =
+            async () => {
+
+                const {
+                    data: {
+                        user
+                    }
+                } =
+                    await supabase.auth.getUser();
+
+
+                if (!user) {
+                    return;
+                }
+
+
+                const {
+                    data: applicationRows,
+                    error
+                } =
+                    await supabase
+                        .from(
+                            'applications'
+                        )
+                        .select(
+                            'opportunity_id'
+                        )
+                        .eq(
+                            'user_id',
+                            user.id
+                        );
+
+
+                if (error) {
+
+                    console.error(
+                        'Unable to load applications:',
+                        error
+                    );
+
+                    return;
+
+                }
+
+
+                const trackedIds =
+                    new Set(
+                        (applicationRows ?? [])
+                            .map(
+                                (row) =>
+                                    row.opportunity_id
+                            )
+                    );
+
+
+                trackButtons.forEach(
+                    (button) => {
+
+                        const opportunityId =
+                            button.getAttribute(
+                                'data-opportunity-id'
+                            );
+
+
+                        if (
+                            opportunityId &&
+                            trackedIds.has(
+                                opportunityId
+                            )
+                        ) {
+
+                            setTrackedState(
+                                button,
+                                true
+                            );
+
+                        }
+
+                    }
+                );
+
+            };
+
+
+        /* =====================================================
+           TRACK APPLICATION
+        ===================================================== */
+
+        const trackApplication =
+            async (
+                button: Element
+            ) => {
+
+                const htmlButton =
+                    button as HTMLButtonElement;
+
+
+                const opportunityId =
+                    htmlButton.getAttribute(
+                        'data-opportunity-id'
+                    );
+
+
+                const deadline =
+                    htmlButton.getAttribute(
+                        'data-opportunity-deadline'
+                    );
+
+
+                const applicationUrl =
+                    htmlButton.getAttribute(
+                        'data-application-url'
+                    );
+
+
+                if (!opportunityId) {
+                    return;
+                }
+
+
+                const {
+                    data: {
+                        user
+                    }
+                } =
+                    await supabase.auth.getUser();
+
+
+                if (!user) {
+
+                    window.location.href =
+                        '/login';
+
+                    return;
+
+                }
+
+
+                /*
+                 * If already tracked, take the user
+                 * directly to Applications.
+                 */
+
+                if (
+                    htmlButton.classList.contains(
+                        'tracked'
+                    )
+                ) {
+
+                    window.location.href =
+                        '/applications';
+
+                    return;
+
+                }
+
+
+                htmlButton.disabled =
+                    true;
+
+                htmlButton.textContent =
+                    'Tracking...';
+
+
+                /* =================================================
+                   CHECK FOR AN EXISTING APPLICATION
+                   ================================================= */
+
+                const {
+                    data: existingApplication,
+                    error: existingError
+                } =
+                    await supabase
+                        .from(
+                            'applications'
+                        )
+                        .select(
+                            'id'
+                        )
+                        .eq(
+                            'user_id',
+                            user.id
+                        )
+                        .eq(
+                            'opportunity_id',
+                            opportunityId
+                        )
+                        .maybeSingle();
+
+
+                if (existingError) {
+
+                    console.error(
+                        'Unable to check application:',
+                        existingError
+                    );
+
+
+                    alert(
+                        'Unable to check your application status. Please try again.'
+                    );
+
+
+                    htmlButton.disabled =
+                        false;
+
+                    setTrackedState(
+                        htmlButton,
+                        false
+                    );
+
+                    return;
+
+                }
+
+
+                if (existingApplication) {
+
+                    setTrackedState(
+                        htmlButton,
+                        true
+                    );
+
+
+                    htmlButton.disabled =
+                        false;
+
+
+                    window.location.href =
+                        '/applications';
+
+                    return;
+
+                }
+
+
+                /* =================================================
+                   FIND EXISTING APPLICATION CYCLE
+                   ================================================= */
+
+                const {
+                    data: cycles,
+                    error: cycleError
+                } =
+                    await supabase
+                        .from(
+                            'Application_cycles'
+                        )
+                        .select(
+                            `
+                            id,
+                            Cycle_name,
+                            Application_open_date,
+                            Application_deadline,
+                            Status,
+                            Application_url
+                            `
+                        )
+                        .eq(
+                            'Opportunity_id',
+                            opportunityId
+                        )
+                        .order(
+                            'Application_deadline',
+                            {
+                                ascending: true
+                            });
+
+
+                if (cycleError) {
+
+                    console.error(
+                        'Unable to find application cycle:',
+                        cycleError
+                    );
+
+
+                    alert(
+                        'Unable to prepare this application. Please try again.'
+                    );
+
+
+                    htmlButton.disabled =
+                        false;
+
+                    setTrackedState(
+                        htmlButton,
+                        false
+                    );
+
+                    return;
+
+                }
+
+
+                let cycle =
+                    cycles?.[0] ?? null;
+
+
+                /* =================================================
+                   CREATE DEFAULT CYCLE IF NONE EXISTS
+                   ================================================= */
+
+                if (!cycle) {
+
+                    const {
+                        data: newCycle,
+                        error: createCycleError
+                    } =
+                        await supabase
+                            .from(
+                                'Application_cycles'
+                            )
+                            .insert({
+                                Opportunity_id:
+                                    opportunityId,
+
+                                Cycle_name:
+                                    'Current Application Cycle',
+
+                                Application_open_date:
+                                    null,
+
+                                Application_deadline:
+                                    deadline || null,
+
+                                Status:
+                                    'Open',
+
+                                Application_url:
+                                    applicationUrl || null
+                            })
+                            .select(
+                                `
+                                id,
+                                Cycle_name,
+                                Application_open_date,
+                                Application_deadline,
+                                Status,
+                                Application_url
+                                `
+                            )
+                            .single();
+
+
+                    if (createCycleError) {
+
+                        console.error(
+                            'Unable to create application cycle:',
+                            createCycleError
+                        );
+
+
+                        alert(
+                            'Unable to prepare the application cycle. Please try again.'
+                        );
+
+
+                        htmlButton.disabled =
+                            false;
+
+                        setTrackedState(
+                            htmlButton,
+                            false
+                        );
+
+                        return;
+
+                    }
+
+
+                    cycle =
+                        newCycle;
+
+                }
+
+
+                /* =================================================
+                   FINAL VALUES
+                   ================================================= */
+
+                const finalDeadline =
+                    cycle?.Application_deadline ??
+                    deadline ??
+                    null;
+
+
+                const finalApplicationUrl =
+                    cycle?.Application_url ??
+                    applicationUrl ??
+                    null;
+
+
+                /* =================================================
+                   CREATE APPLICATION
+                   ================================================= */
+
+                const {
+                    error: insertError
+                } =
+                    await supabase
+                        .from(
+                            'applications'
+                        )
+                        .insert({
+                            user_id:
+                                user.id,
+
+                            opportunity_id:
+                                opportunityId,
+
+                            application_cycle_id:
+                                cycle.id,
+
+                            status:
+                                'Interested',
+
+                            applied_at:
+                                null,
+
+                            deadline_at_application:
+                                finalDeadline,
+
+                            application_url:
+                                finalApplicationUrl,
+
+                            notes:
+                                null,
+
+                            outcome:
+                                null,
+
+                            outcome_date:
+                                null
+                        });
+
+
+                if (insertError) {
+
+                    console.error(
+                        'Unable to track application:',
+                        insertError
+                    );
+
+
+                    if (
+                        insertError.code ===
+                        '23505'
+                    ) {
+
+                        setTrackedState(
+                            htmlButton,
+                            true
+                        );
+
+                    } else {
+
+                        alert(
+                            'Unable to track this application. Please try again.'
+                        );
+
+
+                        setTrackedState(
+                            htmlButton,
+                            false
+                        );
+
+                    }
+
+
+                    htmlButton.disabled =
+                        false;
+
+                    return;
+
+                }
+
+
+                /* =================================================
+                   SUCCESS
+                   ================================================= */
+
+                setTrackedState(
+                    htmlButton,
+                    true
+                );
+
+
+                htmlButton.disabled =
+                    false;
+
+
+                const goToApplications =
+                    confirm(
+                        'Application tracked successfully. Would you like to open your Applications page now?'
+                    );
+
+
+                if (goToApplications) {
+
+                    window.location.href =
+                        '/applications';
+
+                }
+
+            };
+
+
+        trackButtons.forEach(
+            (button) => {
+
+                button.addEventListener(
+                    'click',
+                    () => {
+                        trackApplication(button);
+                    }
+                );
+
+            }
+        );
+
+
+        /* =====================================================
            INITIALIZE
         ===================================================== */
 
         runSearch();
 
         loadSavedOpportunities();
+
+        loadTrackedApplications();
 
     </script>
 
