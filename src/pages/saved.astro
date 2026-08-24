@@ -1,0 +1,617 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { supabase } from '../lib/supabase';
+
+const {
+    data: {
+        user
+    }
+} = await supabase.auth.getUser();
+
+let savedOpportunities = [];
+let error = null;
+
+if (user) {
+    const result = await supabase
+        .from('saved_opportunities')
+        .select(`
+            id,
+            opportunity_id,
+            saved_at,
+            notes,
+            Opportunities (
+                Id,
+                Title,
+                Institution,
+                Opportunity_type,
+                Academic_level,
+                Discipline,
+                Country,
+                City,
+                Deadline,
+                Funding_type,
+                Verification_status,
+                Official_url,
+                Description
+            )
+        `)
+        .eq('user_id', user.id)
+        .order('saved_at', {
+            ascending: false
+        });
+
+    savedOpportunities = result.data ?? [];
+    error = result.error;
+}
+---
+
+<Layout title="Saved Opportunities — Oppvia">
+
+    <section class="py-12 sm:py-16">
+
+        <!-- HEADER -->
+        <div class="mb-10">
+
+            <div class="mb-4">
+                <span
+                    class="inline-flex items-center gap-2
+                    px-4 py-2 rounded-full
+                    bg-purple-500/10
+                    border border-purple-400/20
+                    text-purple-200
+                    text-sm font-semibold"
+                >
+                    ⭐ Your saved opportunities
+                </span>
+            </div>
+
+            <h1
+                class="text-4xl sm:text-5xl
+                font-extrabold
+                tracking-tight mb-4"
+            >
+                Saved Opportunities
+            </h1>
+
+            <p class="text-slate-400 text-lg max-w-2xl">
+                Keep track of opportunities you want to come back to.
+            </p>
+
+        </div>
+
+
+        <!-- NOT SIGNED IN -->
+        {
+            !user && (
+                <div
+                    class="rounded-3xl
+                    border border-white/10
+                    bg-white/[0.04]
+                    backdrop-blur-xl
+                    p-8 sm:p-10
+                    text-center"
+                >
+
+                    <div class="text-5xl mb-5">
+                        🔐
+                    </div>
+
+                    <h2
+                        class="text-2xl
+                        font-bold mb-3"
+                    >
+                        Sign in to see your saved opportunities
+                    </h2>
+
+                    <p
+                        class="text-slate-400
+                        max-w-lg
+                        mx-auto mb-6"
+                    >
+                        Your saved opportunities are connected to
+                        your account, so you can access them whenever
+                        you return to Oppvia.
+                    </p>
+
+                    <a
+                        href="/login"
+                        class="op-btn op-btn-primary"
+                        style="text-decoration:none;"
+                    >
+                        Sign in
+                    </a>
+
+                </div>
+            )
+        }
+
+
+        <!-- DATABASE ERROR -->
+        {
+            user && error && (
+                <div
+                    class="rounded-2xl
+                    border border-red-400/20
+                    bg-red-500/10
+                    p-6"
+                >
+
+                    <h2
+                        class="font-bold
+                        text-red-300 mb-2"
+                    >
+                        Unable to load saved opportunities
+                    </h2>
+
+                    <p class="text-red-200/70 text-sm">
+                        Please try again later.
+                    </p>
+
+                </div>
+            )
+        }
+
+
+        <!-- SAVED OPPORTUNITIES -->
+        {
+            user &&
+            !error &&
+            savedOpportunities.length > 0 && (
+                <>
+                    <div
+                        class="flex items-center
+                        justify-between
+                        mb-6"
+                    >
+
+                        <div>
+
+                            <h2 class="text-xl font-bold">
+                                Your saved opportunities
+                            </h2>
+
+                            <p
+                                class="text-sm
+                                text-slate-500 mt-1"
+                            >
+                                {savedOpportunities.length}
+                                {
+                                    savedOpportunities.length === 1
+                                        ? ' opportunity'
+                                        : ' opportunities'
+                                }
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="saved-opportunity-list"
+                        class="grid grid-cols-1
+                        lg:grid-cols-2
+                        gap-6"
+                    >
+
+                        {
+                            savedOpportunities.map((saved) => {
+
+                                const opportunity =
+                                    Array.isArray(
+                                        saved.Opportunities
+                                    )
+                                        ? saved.Opportunities[0]
+                                        : saved.Opportunities;
+
+                                if (!opportunity) {
+                                    return null;
+                                }
+
+                                return (
+                                    <article
+                                        class="saved-opportunity-card
+                                        rounded-2xl
+                                        border border-white/10
+                                        bg-white/[0.04]
+                                        p-6
+                                        transition
+                                        hover:border-purple-400/30
+                                        hover:bg-white/[0.06]"
+                                        data-saved-id={saved.id}
+                                    >
+
+                                        <!-- CARD HEADER -->
+                                        <div
+                                            class="flex items-start
+                                            justify-between
+                                            gap-4 mb-5"
+                                        >
+
+                                            <div class="flex-1">
+
+                                                <p
+                                                    class="text-sm
+                                                    text-purple-300
+                                                    font-semibold mb-2"
+                                                >
+                                                    {
+                                                        opportunity.Opportunity_type ??
+                                                        'Opportunity'
+                                                    }
+                                                </p>
+
+                                                <h3
+                                                    class="text-xl
+                                                    font-bold
+                                                    leading-snug"
+                                                >
+                                                    {
+                                                        opportunity.Title ??
+                                                        'Untitled opportunity'
+                                                    }
+                                                </h3>
+
+                                            </div>
+
+
+                                            {
+                                                opportunity.Verification_status ===
+                                                    'verified' && (
+                                                    <span
+                                                        class="shrink-0
+                                                        text-xs
+                                                        font-semibold
+                                                        px-2.5 py-1
+                                                        rounded-full
+                                                        bg-emerald-500/10
+                                                        border
+                                                        border-emerald-400/20
+                                                        text-emerald-300"
+                                                    >
+                                                        ✓ Verified
+                                                    </span>
+                                                )
+                                            }
+
+                                        </div>
+
+
+                                        <!-- INSTITUTION -->
+                                        {
+                                            opportunity.Institution && (
+                                                <p
+                                                    class="text-slate-300
+                                                    font-medium mb-3"
+                                                >
+                                                    {
+                                                        opportunity.Institution
+                                                    }
+                                                </p>
+                                            )
+                                        }
+
+
+                                        <!-- LOCATION -->
+                                        {
+                                            (
+                                                opportunity.Country ||
+                                                opportunity.City
+                                            ) && (
+                                                <p
+                                                    class="text-slate-500
+                                                    text-sm mb-4"
+                                                >
+                                                    📍
+                                                    {
+                                                        opportunity.City
+                                                            ? `${opportunity.City}, `
+                                                            : ''
+                                                    }
+                                                    {
+                                                        opportunity.Country ??
+                                                        ''
+                                                    }
+                                                </p>
+                                            )
+                                        }
+
+
+                                        <!-- TAGS -->
+                                        <div
+                                            class="flex flex-wrap
+                                            gap-2 mb-5"
+                                        >
+
+                                            {
+                                                opportunity.Academic_level && (
+                                                    <span
+                                                        class="text-xs
+                                                        font-medium
+                                                        px-2.5 py-1
+                                                        rounded-lg
+                                                        bg-blue-500/10
+                                                        border
+                                                        border-blue-400/20
+                                                        text-blue-300"
+                                                    >
+                                                        {
+                                                            opportunity.Academic_level
+                                                        }
+                                                    </span>
+                                                )
+                                            }
+
+
+                                            {
+                                                opportunity.Discipline && (
+                                                    <span
+                                                        class="text-xs
+                                                        font-medium
+                                                        px-2.5 py-1
+                                                        rounded-lg
+                                                        bg-purple-500/10
+                                                        border
+                                                        border-purple-400/20
+                                                        text-purple-300"
+                                                    >
+                                                        {
+                                                            opportunity.Discipline
+                                                        }
+                                                    </span>
+                                                )
+                                            }
+
+
+                                            {
+                                                opportunity.Funding_type && (
+                                                    <span
+                                                        class="text-xs
+                                                        font-medium
+                                                        px-2.5 py-1
+                                                        rounded-lg
+                                                        bg-cyan-500/10
+                                                        border
+                                                        border-cyan-400/20
+                                                        text-cyan-300"
+                                                    >
+                                                        {
+                                                            opportunity.Funding_type
+                                                        }
+                                                    </span>
+                                                )
+                                            }
+
+                                        </div>
+
+
+                                        <!-- DEADLINE -->
+                                        {
+                                            opportunity.Deadline && (
+                                                <div
+                                                    class="flex
+                                                    items-center
+                                                    justify-between
+                                                    border-t
+                                                    border-white/10
+                                                    pt-4 mb-5"
+                                                >
+
+                                                    <span
+                                                        class="text-sm
+                                                        text-slate-500"
+                                                    >
+                                                        Deadline
+                                                    </span>
+
+                                                    <span
+                                                        class="text-sm
+                                                        font-semibold
+                                                        text-slate-300"
+                                                    >
+                                                        {
+                                                            new Date(
+                                                                opportunity.Deadline +
+                                                                    'T00:00:00'
+                                                            ).toLocaleDateString(
+                                                                'en-US',
+                                                                {
+                                                                    year: 'numeric',
+                                                                    month: 'short',
+                                                                    day: 'numeric'
+                                                                }
+                                                            )
+                                                        }
+                                                    </span>
+
+                                                </div>
+                                            )
+                                        }
+
+
+                                        <!-- ACTIONS -->
+                                        <div
+                                            class="flex flex-wrap
+                                            gap-3"
+                                        >
+
+                                            {
+                                                opportunity.Official_url && (
+                                                    <a
+                                                        href={
+                                                            opportunity.Official_url
+                                                        }
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        class="op-btn
+                                                        op-btn-primary"
+                                                        style="text-decoration:none;"
+                                                    >
+                                                        View opportunity →
+                                                    </a>
+                                                )
+                                            }
+
+
+                                            <button
+                                                type="button"
+                                                class="op-btn
+                                                op-btn-secondary
+                                                remove-saved"
+                                                data-saved-id={saved.id}
+                                            >
+                                                Remove
+                                            </button>
+
+                                        </div>
+
+                                    </article>
+                                );
+                            })
+                        }
+
+                    </div>
+                </>
+            )
+        }
+
+
+        <!-- EMPTY STATE -->
+        {
+            user &&
+            !error &&
+            savedOpportunities.length === 0 && (
+                <div
+                    class="rounded-3xl
+                    border border-white/10
+                    bg-white/[0.04]
+                    backdrop-blur-xl
+                    p-8 sm:p-12
+                    text-center"
+                >
+
+                    <div class="text-5xl mb-5">
+                        ☆
+                    </div>
+
+                    <h2
+                        class="text-2xl
+                        font-bold mb-3"
+                    >
+                        No saved opportunities yet
+                    </h2>
+
+                    <p
+                        class="text-slate-400
+                        max-w-lg
+                        mx-auto mb-6"
+                    >
+                        When you find an opportunity you want to
+                        keep, click the Save button and it will
+                        appear here.
+                    </p>
+
+                    <a
+                        href="/opportunities"
+                        class="op-btn op-btn-primary"
+                        style="text-decoration:none;"
+                    >
+                        Explore opportunities →
+                    </a>
+
+                </div>
+            )
+        }
+
+    </section>
+
+
+    <!-- REMOVE SAVED OPPORTUNITY -->
+    {
+        user && (
+            <script define:vars={{ userId: user.id }}>
+                import { supabase } from '../lib/supabase';
+
+                const removeButtons =
+                    Array.from(
+                        document.querySelectorAll(
+                            '.remove-saved'
+                        )
+                    );
+
+                removeButtons.forEach((button) => {
+
+                    button.addEventListener(
+                        'click',
+                        async () => {
+
+                            const htmlButton =
+                                button as HTMLButtonElement;
+
+                            const savedId =
+                                htmlButton.dataset.savedId;
+
+                            if (!savedId) {
+                                return;
+                            }
+
+                            htmlButton.disabled = true;
+                            htmlButton.textContent = 'Removing...';
+
+                            const { error } =
+                                await supabase
+                                    .from(
+                                        'saved_opportunities'
+                                    )
+                                    .delete()
+                                    .eq(
+                                        'id',
+                                        savedId
+                                    )
+                                    .eq(
+                                        'user_id',
+                                        userId
+                                    );
+
+                            if (error) {
+
+                                console.error(
+                                    'Unable to remove saved opportunity:',
+                                    error
+                                );
+
+                                alert(
+                                    'Unable to remove this opportunity. Please try again.'
+                                );
+
+                                htmlButton.disabled = false;
+                                htmlButton.textContent = 'Remove';
+
+                                return;
+                            }
+
+                            const card =
+                                htmlButton.closest(
+                                    '.saved-opportunity-card'
+                                );
+
+                            card?.remove();
+
+                            const remaining =
+                                document.querySelectorAll(
+                                    '.saved-opportunity-card'
+                                ).length;
+
+                            if (remaining === 0) {
+                                window.location.reload();
+                            }
+
+                        }
+                    );
+
+                });
+            </script>
+        )
+    }
+
+</Layout>
