@@ -3,57 +3,75 @@ import Layout from '../layouts/Layout.astro';
 import { supabase } from '../lib/supabase';
 
 const { data: opportunities, error } = await supabase
-    .from('Opportunities')
-    .select('*')
-    .eq('Status', 'published')
-    .order('Deadline', { ascending: true });
+.from('Opportunities')
+.select('*')
+.eq('Status', 'published')
+.order('Deadline', { ascending: true });
 
 const opportunityList = opportunities ?? [];
----
+
+const countries = [
+...new Set(
+opportunityList
+.map((item) => item.Country)
+.filter(Boolean)
+)
+].sort();
+---------
 
 <Layout title="Opportunities — Oppvia">
 
-    <section class="py-12 sm:py-16">
+```
+<section class="py-12 sm:py-16">
 
-        <!-- HEADER -->
-        <div class="mb-10">
+    <!-- PAGE HEADER -->
+    <div class="mb-10">
 
-            <div class="mb-4">
-                <span
-                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full
-                    bg-purple-500/10 border border-purple-400/20
-                    text-purple-200 text-sm font-semibold"
-                >
-                    ✨ Discover your next opportunity
-                </span>
-            </div>
-
-            <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4">
-                Opportunities
-            </h1>
-
-            <p class="text-slate-400 text-lg max-w-2xl">
-                Explore scholarships, fellowships, research positions,
-                internships, grants, and other opportunities from around
-                the world.
-            </p>
-
+        <div class="mb-4">
+            <span
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full
+                bg-purple-500/10 border border-purple-400/20
+                text-purple-200 text-sm font-semibold"
+            >
+                ✨ Discover your next opportunity
+            </span>
         </div>
 
-
-        <!-- SEARCH + FILTERS -->
-        <div
-            class="rounded-3xl border border-white/10
-            bg-white/[0.04] backdrop-blur-xl
-            p-5 sm:p-6 mb-10"
+        <h1
+            class="text-4xl sm:text-5xl font-extrabold
+            tracking-tight mb-4"
         >
+            Opportunities
+        </h1>
+
+        <p class="text-slate-400 text-lg max-w-2xl">
+            Explore scholarships, fellowships, research positions,
+            internships, grants, and other opportunities from around
+            the world.
+        </p>
+
+    </div>
+
+
+    <!-- SEARCH + FILTERS -->
+    <div
+        class="rounded-3xl
+        border border-white/10
+        bg-white/[0.04]
+        backdrop-blur-xl
+        p-5 sm:p-6
+        mb-10"
+    >
+
+        <div class="flex flex-col lg:flex-row lg:items-end gap-4">
 
             <!-- SEARCH -->
-            <div class="mb-5">
+            <div class="flex-1">
 
                 <label
                     for="opportunity-search"
-                    class="block text-sm font-semibold text-slate-300 mb-2"
+                    class="block text-sm font-semibold
+                    text-slate-300 mb-2"
                 >
                     Search opportunities
                 </label>
@@ -62,7 +80,8 @@ const opportunityList = opportunities ?? [];
 
                     <span
                         class="absolute left-4 top-1/2
-                        -translate-y-1/2 text-slate-500"
+                        -translate-y-1/2
+                        text-slate-500"
                     >
                         🔎
                     </span>
@@ -70,7 +89,7 @@ const opportunityList = opportunities ?? [];
                     <input
                         id="opportunity-search"
                         type="search"
-                        placeholder="Search by title, institution, discipline..."
+                        placeholder="Search title, institution, discipline..."
                         class="w-full rounded-xl
                         bg-slate-950/80
                         border border-white/10
@@ -87,156 +106,178 @@ const opportunityList = opportunities ?? [];
             </div>
 
 
-            <!-- FILTERS -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- SEARCH BUTTON -->
+            <button
+                id="search-button"
+                type="button"
+                class="op-btn op-btn-primary
+                min-h-[50px]"
+            >
+                Search
+            </button>
 
-                <!-- TYPE -->
-                <div>
-
-                    <label
-                        for="type-filter"
-                        class="block text-sm font-semibold text-slate-300 mb-2"
-                    >
-                        Opportunity type
-                    </label>
-
-                    <select
-                        id="type-filter"
-                        class="w-full rounded-xl
-                        bg-slate-950
-                        border border-white/10
-                        px-4 py-3
-                        text-white
-                        focus:outline-none
-                        focus:ring-2
-                        focus:ring-purple-500/40"
-                    >
-                        <option value="">All types</option>
-                        <option value="Scholarship">Scholarship</option>
-                        <option value="Fellowship">Fellowship</option>
-                        <option value="Research Position">Research Position</option>
-                        <option value="Postdoctoral">Postdoctoral</option>
-                        <option value="Internship">Internship</option>
-                        <option value="Grant">Grant</option>
-                        <option value="Job">Job</option>
-                    </select>
-
-                </div>
+        </div>
 
 
-                <!-- ACADEMIC LEVEL -->
-                <div>
+        <!-- FILTERS -->
+        <div
+            class="grid grid-cols-1
+            sm:grid-cols-2
+            lg:grid-cols-5
+            gap-4
+            mt-5"
+        >
 
-                    <label
-                        for="level-filter"
-                        class="block text-sm font-semibold text-slate-300 mb-2"
-                    >
-                        Academic level
-                    </label>
+            <!-- TYPE -->
+            <div>
 
-                    <select
-                        id="level-filter"
-                        class="w-full rounded-xl
-                        bg-slate-950
-                        border border-white/10
-                        px-4 py-3
-                        text-white
-                        focus:outline-none
-                        focus:ring-2
-                        focus:ring-purple-500/40"
-                    >
-                        <option value="">All levels</option>
-                        <option value="Undergraduate">Undergraduate</option>
-                        <option value="Master's">Master's</option>
-                        <option value="PhD">PhD</option>
-                        <option value="Postdoctoral">Postdoctoral</option>
-                        <option value="Professional">Professional</option>
-                    </select>
+                <label
+                    for="type-filter"
+                    class="block text-sm font-semibold
+                    text-slate-300 mb-2"
+                >
+                    Opportunity type
+                </label>
 
-                </div>
+                <select
+                    id="type-filter"
+                    class="w-full rounded-xl
+                    bg-slate-950
+                    border border-white/10
+                    px-4 py-3
+                    text-white
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-purple-500/40"
+                >
+                    <option value="">All types</option>
+                    <option value="Scholarship">Scholarship</option>
+                    <option value="Fellowship">Fellowship</option>
+                    <option value="Research Position">Research Position</option>
+                    <option value="Postdoctoral">Postdoctoral</option>
+                    <option value="Internship">Internship</option>
+                    <option value="Grant">Grant</option>
+                    <option value="Job">Job</option>
+                </select>
 
-
-                <!-- DISCIPLINE -->
-                <div>
-
-                    <label
-                        for="discipline-filter"
-                        class="block text-sm font-semibold text-slate-300 mb-2"
-                    >
-                        Discipline
-                    </label>
-
-                    <select
-                        id="discipline-filter"
-                        class="w-full rounded-xl
-                        bg-slate-950
-                        border border-white/10
-                        px-4 py-3
-                        text-white
-                        focus:outline-none
-                        focus:ring-2
-                        focus:ring-purple-500/40"
-                    >
-                        <option value="">All disciplines</option>
-                        <option value="Law">Law</option>
-                        <option value="Science">Science</option>
-                        <option value="Technology">Technology</option>
-                        <option value="Engineering">Engineering</option>
-                        <option value="Medicine">Medicine</option>
-                        <option value="Business">Business</option>
-                        <option value="Humanities">Humanities</option>
-                        <option value="Social Sciences">Social Sciences</option>
-                    </select>
-
-                </div>
+            </div>
 
 
-                <!-- FUNDING -->
-                <div>
+            <!-- LEVEL -->
+            <div>
 
-                    <label
-                        for="funding-filter"
-                        class="block text-sm font-semibold text-slate-300 mb-2"
-                    >
-                        Funding
-                    </label>
+                <label
+                    for="level-filter"
+                    class="block text-sm font-semibold
+                    text-slate-300 mb-2"
+                >
+                    Academic level
+                </label>
 
-                    <select
-                        id="funding-filter"
-                        class="w-full rounded-xl
-                        bg-slate-950
-                        border border-white/10
-                        px-4 py-3
-                        text-white
-                        focus:outline-none
-                        focus:ring-2
-                        focus:ring-purple-500/40"
-                    >
-                        <option value="">All funding</option>
-                        <option value="Fully Funded">Fully Funded</option>
-                        <option value="Partially Funded">Partially Funded</option>
-                        <option value="Tuition Only">Tuition Only</option>
-                        <option value="Stipend">Stipend</option>
-                    </select>
+                <select
+                    id="level-filter"
+                    class="w-full rounded-xl
+                    bg-slate-950
+                    border border-white/10
+                    px-4 py-3
+                    text-white
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-purple-500/40"
+                >
+                    <option value="">All levels</option>
+                    <option value="Undergraduate">Undergraduate</option>
+                    <option value="Master's">Master's</option>
+                    <option value="PhD">PhD</option>
+                    <option value="Postdoctoral">Postdoctoral</option>
+                    <option value="Professional">Professional</option>
+                </select>
 
-                </div>
+            </div>
+
+
+            <!-- DISCIPLINE -->
+            <div>
+
+                <label
+                    for="discipline-filter"
+                    class="block text-sm font-semibold
+                    text-slate-300 mb-2"
+                >
+                    Discipline
+                </label>
+
+                <select
+                    id="discipline-filter"
+                    class="w-full rounded-xl
+                    bg-slate-950
+                    border border-white/10
+                    px-4 py-3
+                    text-white
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-purple-500/40"
+                >
+                    <option value="">All disciplines</option>
+                    <option value="Law">Law</option>
+                    <option value="Science">Science</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Medicine">Medicine</option>
+                    <option value="Business">Business</option>
+                    <option value="Humanities">Humanities</option>
+                    <option value="Social Sciences">Social Sciences</option>
+                </select>
+
+            </div>
+
+
+            <!-- FUNDING -->
+            <div>
+
+                <label
+                    for="funding-filter"
+                    class="block text-sm font-semibold
+                    text-slate-300 mb-2"
+                >
+                    Funding
+                </label>
+
+                <select
+                    id="funding-filter"
+                    class="w-full rounded-xl
+                    bg-slate-950
+                    border border-white/10
+                    px-4 py-3
+                    text-white
+                    focus:outline-none
+                    focus:ring-2
+                    focus:ring-purple-500/40"
+                >
+                    <option value="">All funding</option>
+                    <option value="Fully Funded">Fully Funded</option>
+                    <option value="Partially Funded">Partially Funded</option>
+                    <option value="Tuition Only">Tuition Only</option>
+                    <option value="Stipend">Stipend</option>
+                </select>
 
             </div>
 
 
             <!-- COUNTRY -->
-            <div class="mt-4">
+            <div>
 
                 <label
                     for="country-filter"
-                    class="block text-sm font-semibold text-slate-300 mb-2"
+                    class="block text-sm font-semibold
+                    text-slate-300 mb-2"
                 >
                     Country
                 </label>
 
                 <select
                     id="country-filter"
-                    class="w-full sm:max-w-xs rounded-xl
+                    class="w-full rounded-xl
                     bg-slate-950
                     border border-white/10
                     px-4 py-3
@@ -246,6 +287,15 @@ const opportunityList = opportunities ?? [];
                     focus:ring-purple-500/40"
                 >
                     <option value="">All countries</option>
+
+                    {
+                        countries.map((country) => (
+                            <option value={country}>
+                                {country}
+                            </option>
+                        ))
+                    }
+
                 </select>
 
             </div>
@@ -253,454 +303,682 @@ const opportunityList = opportunities ?? [];
         </div>
 
 
-        <!-- RESULT SUMMARY -->
-        <div class="flex items-center justify-between mb-6">
+        <!-- FILTER ACTIONS -->
+        <div class="flex flex-wrap items-center gap-3 mt-5">
 
-            <div>
+            <button
+                id="clear-filters"
+                type="button"
+                class="op-btn op-btn-secondary"
+            >
+                Clear filters
+            </button>
 
-                <h2 class="text-xl font-bold">
-                    Available opportunities
-                </h2>
-
-                <p
-                    id="result-count"
-                    class="text-sm text-slate-500 mt-1"
-                >
-                    {opportunityList.length} opportunities
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <!-- ERROR -->
-        {
-            error && (
-                <div
-                    class="rounded-2xl
-                    border border-red-400/20
-                    bg-red-500/10
-                    p-6 mb-8"
-                >
-                    <h2 class="font-bold text-red-300 mb-2">
-                        Unable to load opportunities
-                    </h2>
-
-                    <p class="text-red-200/70 text-sm">
-                        Please try again later.
-                    </p>
-                </div>
-            )
-        }
-
-
-        <!-- OPPORTUNITY RESULTS -->
-        <div
-            id="opportunity-list"
-            class="grid grid-cols-1 lg:grid-cols-2 gap-6"
-        >
-
-            {
-                opportunityList.map((opportunity) => (
-                    <article
-                        class="opportunity-card rounded-2xl
-                        border border-white/10
-                        bg-white/[0.04]
-                        p-6
-                        transition
-                        hover:border-purple-400/30
-                        hover:bg-white/[0.06]"
-                        data-title={opportunity.Title ?? ''}
-                        data-institution={opportunity.Institution ?? ''}
-                        data-type={opportunity.Opportunity_type ?? ''}
-                        data-level={opportunity.Academic_level ?? ''}
-                        data-discipline={opportunity.Discipline ?? ''}
-                        data-country={opportunity.Country ?? ''}
-                        data-funding={opportunity.Funding_type ?? ''}
-                    >
-
-                        <!-- TOP -->
-                        <div class="flex items-start justify-between gap-4 mb-5">
-
-                            <div class="flex-1">
-
-                                <p class="text-sm text-purple-300 font-semibold mb-2">
-                                    {opportunity.Opportunity_type ?? 'Opportunity'}
-                                </p>
-
-                                <h3 class="text-xl font-bold leading-snug">
-                                    {opportunity.Title ?? 'Untitled opportunity'}
-                                </h3>
-
-                            </div>
-
-                            {
-                                opportunity.Verification_status === 'verified' && (
-                                    <span
-                                        class="shrink-0
-                                        text-xs font-semibold
-                                        px-2.5 py-1 rounded-full
-                                        bg-emerald-500/10
-                                        border border-emerald-400/20
-                                        text-emerald-300"
-                                    >
-                                        ✓ Verified
-                                    </span>
-                                )
-                            }
-
-                        </div>
-
-
-                        <!-- INSTITUTION -->
-                        {
-                            opportunity.Institution && (
-                                <p class="text-slate-300 font-medium mb-3">
-                                    {opportunity.Institution}
-                                </p>
-                            )
-                        }
-
-
-                        <!-- LOCATION -->
-                        {
-                            (opportunity.Country || opportunity.City) && (
-                                <p class="text-slate-500 text-sm mb-4">
-                                    📍
-                                    {opportunity.City
-                                        ? `${opportunity.City}, `
-                                        : ''}
-                                    {opportunity.Country ?? ''}
-                                </p>
-                            )
-                        }
-
-
-                        <!-- TAGS -->
-                        <div class="flex flex-wrap gap-2 mb-5">
-
-                            {
-                                opportunity.Academic_level && (
-                                    <span
-                                        class="text-xs font-medium
-                                        px-2.5 py-1 rounded-lg
-                                        bg-blue-500/10
-                                        border border-blue-400/20
-                                        text-blue-300"
-                                    >
-                                        {opportunity.Academic_level}
-                                    </span>
-                                )
-                            }
-
-                            {
-                                opportunity.Discipline && (
-                                    <span
-                                        class="text-xs font-medium
-                                        px-2.5 py-1 rounded-lg
-                                        bg-purple-500/10
-                                        border border-purple-400/20
-                                        text-purple-300"
-                                    >
-                                        {opportunity.Discipline}
-                                    </span>
-                                )
-                            }
-
-                            {
-                                opportunity.Funding_type && (
-                                    <span
-                                        class="text-xs font-medium
-                                        px-2.5 py-1 rounded-lg
-                                        bg-cyan-500/10
-                                        border border-cyan-400/20
-                                        text-cyan-300"
-                                    >
-                                        {opportunity.Funding_type}
-                                    </span>
-                                )
-                            }
-
-                        </div>
-
-
-                        <!-- DEADLINE -->
-                        {
-                            opportunity.Deadline && (
-                                <div
-                                    class="flex items-center justify-between
-                                    border-t border-white/10
-                                    pt-4 mb-5"
-                                >
-
-                                    <span class="text-sm text-slate-500">
-                                        Deadline
-                                    </span>
-
-                                    <span class="text-sm font-semibold text-slate-300">
-                                        {new Date(
-                                            opportunity.Deadline + 'T00:00:00'
-                                        ).toLocaleDateString(
-                                            'en-US',
-                                            {
-                                                year: 'numeric',
-                                                month: 'short',
-                                                day: 'numeric'
-                                            }
-                                        )}
-                                    </span>
-
-                                </div>
-                            )
-                        }
-
-
-                        <!-- ACTION -->
-                        <div class="flex flex-wrap gap-3">
-
-                            {
-                                opportunity.Official_url && (
-                                    <a
-                                        href={opportunity.Official_url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="op-btn op-btn-primary"
-                                        style="text-decoration:none;"
-                                    >
-                                        View opportunity →
-                                    </a>
-                                )
-                            }
-
-                            <button
-                                type="button"
-                                class="op-btn op-btn-secondary"
-                                disabled
-                                title="Saving will be connected next"
-                                style="opacity:0.65; cursor:not-allowed;"
-                            >
-                                ☆ Save
-                            </button>
-
-                        </div>
-
-                    </article>
-                ))
-            }
+            <span
+                id="filter-status"
+                class="text-sm text-slate-500"
+            >
+                Showing all published opportunities
+            </span>
 
         </div>
 
+    </div>
 
-        <!-- EMPTY STATE -->
-        <div
-            id="empty-state"
-            class="hidden text-center py-20"
-        >
 
-            <div class="text-5xl mb-5">
-                🔎
-            </div>
+    <!-- RESULT HEADER -->
+    <div
+        class="flex flex-col sm:flex-row
+        sm:items-end sm:justify-between
+        gap-3 mb-6"
+    >
 
-            <h2 class="text-2xl font-bold mb-3">
-                No opportunities found
+        <div>
+
+            <h2 class="text-xl font-bold">
+                Available opportunities
             </h2>
 
-            <p class="text-slate-500 max-w-md mx-auto">
-                Try changing your search or filters to find more
-                opportunities.
+            <p
+                id="result-count"
+                class="text-sm text-slate-500 mt-1"
+            >
+                {opportunityList.length}
+                {
+                    opportunityList.length === 1
+                        ? 'opportunity'
+                        : 'opportunities'
+                }
             </p>
 
         </div>
 
-    </section>
+        <div
+            class="text-sm text-slate-500"
+        >
+            Sorted by deadline
+        </div>
+
+    </div>
 
 
-    <!-- CLIENT FILTERING -->
-    <script define:vars={{ opportunityList }}>
-        const cards =
-            Array.from(
-                document.querySelectorAll('.opportunity-card')
-            );
+    <!-- DATABASE ERROR -->
+    {
+        error && (
+            <div
+                class="rounded-2xl
+                border border-red-400/20
+                bg-red-500/10
+                p-6 mb-8"
+            >
 
-        const searchInput =
-            document.getElementById('opportunity-search');
+                <h2
+                    class="font-bold
+                    text-red-300 mb-2"
+                >
+                    Unable to load opportunities
+                </h2>
 
-        const typeFilter =
-            document.getElementById('type-filter');
+                <p class="text-red-200/70 text-sm">
+                    Please try again later.
+                </p>
 
-        const levelFilter =
-            document.getElementById('level-filter');
-
-        const disciplineFilter =
-            document.getElementById('discipline-filter');
-
-        const fundingFilter =
-            document.getElementById('funding-filter');
-
-        const countryFilter =
-            document.getElementById('country-filter');
-
-        const resultCount =
-            document.getElementById('result-count');
-
-        const emptyState =
-            document.getElementById('empty-state');
+            </div>
+        )
+    }
 
 
-        // Populate countries from the opportunities in the database.
-        const countries = [
-            ...new Set(
-                opportunityList
-                    .map((item) => item.Country)
-                    .filter(Boolean)
+    <!-- RESULTS -->
+    <div
+        id="opportunity-list"
+        class="grid grid-cols-1
+        lg:grid-cols-2
+        gap-6"
+    >
+
+        {
+            opportunityList.map((opportunity) => (
+                <article
+                    class="opportunity-card
+                    rounded-2xl
+                    border border-white/10
+                    bg-white/[0.04]
+                    p-6
+                    transition
+                    hover:border-purple-400/30
+                    hover:bg-white/[0.06]"
+                    data-title={opportunity.Title ?? ''}
+                    data-institution={opportunity.Institution ?? ''}
+                    data-type={opportunity.Opportunity_type ?? ''}
+                    data-level={opportunity.Academic_level ?? ''}
+                    data-discipline={opportunity.Discipline ?? ''}
+                    data-country={opportunity.Country ?? ''}
+                    data-funding={opportunity.Funding_type ?? ''}
+                >
+
+                    <!-- CARD HEADER -->
+                    <div
+                        class="flex items-start
+                        justify-between gap-4 mb-5"
+                    >
+
+                        <div class="flex-1">
+
+                            <p
+                                class="text-sm
+                                text-purple-300
+                                font-semibold mb-2"
+                            >
+                                {opportunity.Opportunity_type ?? 'Opportunity'}
+                            </p>
+
+                            <h3
+                                class="text-xl
+                                font-bold
+                                leading-snug"
+                            >
+                                {opportunity.Title ??
+                                    'Untitled opportunity'}
+                            </h3>
+
+                        </div>
+
+
+                        {
+                            opportunity.Verification_status === 'verified' && (
+                                <span
+                                    class="shrink-0
+                                    text-xs font-semibold
+                                    px-2.5 py-1
+                                    rounded-full
+                                    bg-emerald-500/10
+                                    border
+                                    border-emerald-400/20
+                                    text-emerald-300"
+                                >
+                                    ✓ Verified
+                                </span>
+                            )
+                        }
+
+                    </div>
+
+
+                    <!-- INSTITUTION -->
+                    {
+                        opportunity.Institution && (
+                            <p
+                                class="text-slate-300
+                                font-medium mb-3"
+                            >
+                                {opportunity.Institution}
+                            </p>
+                        )
+                    }
+
+
+                    <!-- LOCATION -->
+                    {
+                        (opportunity.Country ||
+                            opportunity.City) && (
+                            <p
+                                class="text-slate-500
+                                text-sm mb-4"
+                            >
+                                📍
+                                {opportunity.City
+                                    ? `${opportunity.City}, `
+                                    : ''}
+                                {opportunity.Country ?? ''}
+                            </p>
+                        )
+                    }
+
+
+                    <!-- TAGS -->
+                    <div
+                        class="flex flex-wrap
+                        gap-2 mb-5"
+                    >
+
+                        {
+                            opportunity.Academic_level && (
+                                <span
+                                    class="text-xs
+                                    font-medium
+                                    px-2.5 py-1
+                                    rounded-lg
+                                    bg-blue-500/10
+                                    border
+                                    border-blue-400/20
+                                    text-blue-300"
+                                >
+                                    {opportunity.Academic_level}
+                                </span>
+                            )
+                        }
+
+                        {
+                            opportunity.Discipline && (
+                                <span
+                                    class="text-xs
+                                    font-medium
+                                    px-2.5 py-1
+                                    rounded-lg
+                                    bg-purple-500/10
+                                    border
+                                    border-purple-400/20
+                                    text-purple-300"
+                                >
+                                    {opportunity.Discipline}
+                                </span>
+                            )
+                        }
+
+                        {
+                            opportunity.Funding_type && (
+                                <span
+                                    class="text-xs
+                                    font-medium
+                                    px-2.5 py-1
+                                    rounded-lg
+                                    bg-cyan-500/10
+                                    border
+                                    border-cyan-400/20
+                                    text-cyan-300"
+                                >
+                                    {opportunity.Funding_type}
+                                </span>
+                            )
+                        }
+
+                    </div>
+
+
+                    <!-- DEADLINE -->
+                    {
+                        opportunity.Deadline && (
+                            <div
+                                class="flex
+                                items-center
+                                justify-between
+                                border-t
+                                border-white/10
+                                pt-4 mb-5"
+                            >
+
+                                <span
+                                    class="text-sm
+                                    text-slate-500"
+                                >
+                                    Deadline
+                                </span>
+
+                                <span
+                                    class="text-sm
+                                    font-semibold
+                                    text-slate-300"
+                                >
+                                    {new Date(
+                                        opportunity.Deadline +
+                                            'T00:00:00'
+                                    ).toLocaleDateString(
+                                        'en-US',
+                                        {
+                                            year: 'numeric',
+                                            month: 'short',
+                                            day: 'numeric'
+                                        }
+                                    )}
+                                </span>
+
+                            </div>
+                        )
+                    }
+
+
+                    <!-- ACTIONS -->
+                    <div
+                        class="flex flex-wrap
+                        gap-3"
+                    >
+
+                        {
+                            opportunity.Official_url && (
+                                <a
+                                    href={opportunity.Official_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="op-btn
+                                    op-btn-primary"
+                                    style="text-decoration:none;"
+                                >
+                                    View opportunity →
+                                </a>
+                            )
+                        }
+
+                        <button
+                            type="button"
+                            class="op-btn
+                            op-btn-secondary
+                            save-opportunity"
+                            disabled
+                            title="Saving will be connected next"
+                            style="
+                                opacity:0.65;
+                                cursor:not-allowed;
+                            "
+                        >
+                            ☆ Save
+                        </button>
+
+                    </div>
+
+                </article>
+            ))
+        }
+
+    </div>
+
+
+    <!-- EMPTY STATE -->
+    <div
+        id="empty-state"
+        class="hidden
+        text-center
+        py-20"
+    >
+
+        <div class="text-5xl mb-5">
+            🔎
+        </div>
+
+        <h2
+            class="text-2xl
+            font-bold mb-3"
+        >
+            No opportunities found
+        </h2>
+
+        <p
+            class="text-slate-500
+            max-w-md mx-auto"
+        >
+            Try changing your search or clearing some filters.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- CLIENT-SIDE SEARCH + FILTERING -->
+<script>
+
+    const cards =
+        Array.from(
+            document.querySelectorAll(
+                '.opportunity-card'
             )
-        ].sort();
+        );
 
 
-        countries.forEach((country) => {
+    const searchInput =
+        document.getElementById(
+            'opportunity-search'
+        );
 
-            const option =
-                document.createElement('option');
 
-            option.value = country;
-            option.textContent = country;
+    const searchButton =
+        document.getElementById(
+            'search-button'
+        );
 
-            countryFilter?.appendChild(option);
+
+    const typeFilter =
+        document.getElementById(
+            'type-filter'
+        );
+
+
+    const levelFilter =
+        document.getElementById(
+            'level-filter'
+        );
+
+
+    const disciplineFilter =
+        document.getElementById(
+            'discipline-filter'
+        );
+
+
+    const fundingFilter =
+        document.getElementById(
+            'funding-filter'
+        );
+
+
+    const countryFilter =
+        document.getElementById(
+            'country-filter'
+        );
+
+
+    const clearFiltersButton =
+        document.getElementById(
+            'clear-filters'
+        );
+
+
+    const resultCount =
+        document.getElementById(
+            'result-count'
+        );
+
+
+    const emptyState =
+        document.getElementById(
+            'empty-state'
+        );
+
+
+    const filterStatus =
+        document.getElementById(
+            'filter-status'
+        );
+
+
+    const runSearch = () => {
+
+        const search =
+            searchInput?.value
+                .trim()
+                .toLowerCase() ?? '';
+
+
+        const type =
+            typeFilter?.value ?? '';
+
+
+        const level =
+            levelFilter?.value ?? '';
+
+
+        const discipline =
+            disciplineFilter?.value ?? '';
+
+
+        const funding =
+            fundingFilter?.value ?? '';
+
+
+        const country =
+            countryFilter?.value ?? '';
+
+
+        let visible = 0;
+
+
+        cards.forEach((card) => {
+
+            const element =
+                card as HTMLElement;
+
+
+            const searchableText =
+                [
+                    element.dataset.title,
+                    element.dataset.institution,
+                    element.dataset.discipline,
+                    element.dataset.country,
+                    element.dataset.type,
+                    element.dataset.level,
+                    element.dataset.funding
+                ]
+                    .filter(Boolean)
+                    .join(' ')
+                    .toLowerCase();
+
+
+            const matchesSearch =
+                !search ||
+                searchableText.includes(search);
+
+
+            const matchesType =
+                !type ||
+                element.dataset.type === type;
+
+
+            const matchesLevel =
+                !level ||
+                element.dataset.level === level;
+
+
+            const matchesDiscipline =
+                !discipline ||
+                element.dataset.discipline === discipline;
+
+
+            const matchesFunding =
+                !funding ||
+                element.dataset.funding === funding;
+
+
+            const matchesCountry =
+                !country ||
+                element.dataset.country === country;
+
+
+            const visibleCard =
+                matchesSearch &&
+                matchesType &&
+                matchesLevel &&
+                matchesDiscipline &&
+                matchesFunding &&
+                matchesCountry;
+
+
+            element.style.display =
+                visibleCard ? '' : 'none';
+
+
+            if (visibleCard) {
+                visible++;
+            }
 
         });
 
 
-        const filterCards = () => {
+        if (resultCount) {
 
-            const search =
-                searchInput?.value
-                    .trim()
-                    .toLowerCase() ?? '';
+            resultCount.textContent =
+                `${visible} ${
+                    visible === 1
+                        ? 'opportunity'
+                        : 'opportunities'
+                }`;
 
-            const type =
-                typeFilter?.value ?? '';
-
-            const level =
-                levelFilter?.value ?? '';
-
-            const discipline =
-                disciplineFilter?.value ?? '';
-
-            const funding =
-                fundingFilter?.value ?? '';
-
-            const country =
-                countryFilter?.value ?? '';
+        }
 
 
-            let visible = 0;
+        if (emptyState) {
+
+            emptyState.classList.toggle(
+                'hidden',
+                visible !== 0
+            );
+
+        }
 
 
-            cards.forEach((card) => {
-
-                const element =
-                    card as HTMLElement;
-
-                const matchesSearch =
-                    !search ||
-                    (
-                        element.dataset.title +
-                        ' ' +
-                        element.dataset.institution +
-                        ' ' +
-                        element.dataset.discipline +
-                        ' ' +
-                        element.dataset.country
-                    )
-                        .toLowerCase()
-                        .includes(search);
+        const hasFilters =
+            Boolean(
+                search ||
+                type ||
+                level ||
+                discipline ||
+                funding ||
+                country
+            );
 
 
-                const matchesType =
-                    !type ||
-                    element.dataset.type === type;
+        if (filterStatus) {
 
-                const matchesLevel =
-                    !level ||
-                    element.dataset.level === level;
-
-                const matchesDiscipline =
-                    !discipline ||
-                    element.dataset.discipline === discipline;
-
-                const matchesFunding =
-                    !funding ||
-                    element.dataset.funding === funding;
-
-                const matchesCountry =
-                    !country ||
-                    element.dataset.country === country;
-
-
-                const show =
-                    matchesSearch &&
-                    matchesType &&
-                    matchesLevel &&
-                    matchesDiscipline &&
-                    matchesFunding &&
-                    matchesCountry;
-
-
-                element.style.display =
-                    show ? '' : 'none';
-
-
-                if (show) {
-                    visible++;
-                }
-
-            });
-
-
-            if (resultCount) {
-                resultCount.textContent =
-                    `${visible} ${
+            filterStatus.textContent =
+                hasFilters
+                    ? `${visible} matching ${
                         visible === 1
                             ? 'opportunity'
                             : 'opportunities'
-                    }`;
+                      }`
+                    : 'Showing all published opportunities';
+
+        }
+
+    };
+
+
+    // Search button
+    searchButton?.addEventListener(
+        'click',
+        runSearch
+    );
+
+
+    // Press Enter inside search box
+    searchInput?.addEventListener(
+        'keydown',
+        (event) => {
+
+            if (
+                event instanceof KeyboardEvent &&
+                event.key === 'Enter'
+            ) {
+                event.preventDefault();
+                runSearch();
             }
 
+        }
+    );
 
-            if (emptyState) {
-                emptyState.classList.toggle(
-                    'hidden',
-                    visible !== 0
-                );
+
+    // Filters apply when changed
+    [
+        typeFilter,
+        levelFilter,
+        disciplineFilter,
+        fundingFilter,
+        countryFilter
+    ].forEach((element) => {
+
+        element?.addEventListener(
+            'change',
+            runSearch
+        );
+
+    });
+
+
+    // Clear filters
+    clearFiltersButton?.addEventListener(
+        'click',
+        () => {
+
+            if (searchInput) {
+                (searchInput as HTMLInputElement).value = '';
             }
 
-        };
+            if (typeFilter) {
+                (typeFilter as HTMLSelectElement).value = '';
+            }
+
+            if (levelFilter) {
+                (levelFilter as HTMLSelectElement).value = '';
+            }
+
+            if (disciplineFilter) {
+                (disciplineFilter as HTMLSelectElement).value = '';
+            }
+
+            if (fundingFilter) {
+                (fundingFilter as HTMLSelectElement).value = '';
+            }
+
+            if (countryFilter) {
+                (countryFilter as HTMLSelectElement).value = '';
+            }
+
+            runSearch();
+
+        }
+    );
 
 
-        [
-            searchInput,
-            typeFilter,
-            levelFilter,
-            disciplineFilter,
-            fundingFilter,
-            countryFilter
-        ].forEach((element) => {
+    // Initial state
+    runSearch();
 
-            element?.addEventListener(
-                'input',
-                filterCards
-            );
-
-            element?.addEventListener(
-                'change',
-                filterCards
-            );
-
-        });
-
-
-        filterCards();
-    </script>
-
+</script>
 </Layout>
