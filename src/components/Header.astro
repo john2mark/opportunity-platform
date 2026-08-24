@@ -1,21 +1,10 @@
 ---
-import { supabase } from '../lib/supabase';
-
 const navItems = [
     { linkText: 'Explore', href: '/' },
     { linkText: 'Opportunities', href: '/opportunities' },
     { linkText: 'Saved', href: '/saved' },
     { linkText: 'Applications', href: '/applications' }
 ];
-
-const {
-    data: { user }
-} = await supabase.auth.getUser();
-
-const fullName =
-    user?.user_metadata?.full_name ||
-    user?.email ||
-    'Account';
 ---
 
 <header class="op-navbar">
@@ -75,6 +64,7 @@ const fullName =
                     gap: 10px;
                 "
             >
+                <!-- AI -->
                 <a
                     href="/ai"
                     class="op-btn op-btn-secondary"
@@ -83,45 +73,59 @@ const fullName =
                     ✨ AI Assistant
                 </a>
 
-                {
-                    user ? (
-                        <>
-                            <a
-                                href="/dashboard"
-                                class="op-btn op-btn-secondary"
-                                style="text-decoration: none;"
-                            >
-                                {fullName}
-                            </a>
+                <!-- Logged out state -->
+                <div
+                    id="header-logged-out"
+                    style="
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                    "
+                >
+                    <a
+                        href="/login"
+                        class="op-btn op-btn-primary"
+                        style="text-decoration: none;"
+                    >
+                        Sign in
+                    </a>
 
-                            <button
-                                id="header-sign-out"
-                                type="button"
-                                class="op-btn op-btn-primary"
-                            >
-                                Sign out
-                            </button>
-                        </>
-                    ) : (
-                        <>
-                            <a
-                                href="/login"
-                                class="op-btn op-btn-primary"
-                                style="text-decoration: none;"
-                            >
-                                Sign in
-                            </a>
+                    <a
+                        href="/signup"
+                        class="op-btn op-btn-secondary"
+                        style="text-decoration: none;"
+                    >
+                        Create account
+                    </a>
+                </div>
 
-                            <a
-                                href="/signup"
-                                class="op-btn op-btn-secondary"
-                                style="text-decoration: none;"
-                            >
-                                Create account
-                            </a>
-                        </>
-                    )
-                }
+                <!-- Logged in state -->
+                <div
+                    id="header-logged-in"
+                    style="
+                        display: none;
+                        align-items: center;
+                        gap: 10px;
+                    "
+                >
+                    <a
+                        id="header-user-name"
+                        href="/dashboard"
+                        class="op-btn op-btn-secondary"
+                        style="text-decoration: none;"
+                    >
+                        Account
+                    </a>
+
+                    <button
+                        id="header-sign-out"
+                        type="button"
+                        class="op-btn op-btn-primary"
+                    >
+                        Sign out
+                    </button>
+                </div>
+
             </div>
 
         </div>
@@ -131,14 +135,72 @@ const fullName =
 <script>
     import { supabase } from '../lib/supabase';
 
+    const loggedOut =
+        document.getElementById('header-logged-out');
+
+    const loggedIn =
+        document.getElementById('header-logged-in');
+
+    const userName =
+        document.getElementById('header-user-name');
+
     const signOutButton =
         document.getElementById('header-sign-out');
 
+    const updateHeader = (user: any) => {
+        if (user) {
+            const fullName =
+                user.user_metadata?.full_name ||
+                user.email ||
+                'Account';
+
+            if (userName) {
+                userName.textContent = fullName;
+            }
+
+            if (loggedOut) {
+                loggedOut.style.display = 'none';
+            }
+
+            if (loggedIn) {
+                loggedIn.style.display = 'flex';
+            }
+        } else {
+            if (loggedOut) {
+                loggedOut.style.display = 'flex';
+            }
+
+            if (loggedIn) {
+                loggedIn.style.display = 'none';
+            }
+        }
+    };
+
+    // Check the current browser session.
+    const {
+        data: { session }
+    } = await supabase.auth.getSession();
+
+    updateHeader(session?.user ?? null);
+
+    // Keep the header synchronized with Supabase authentication.
+    supabase.auth.onAuthStateChange((_event, session) => {
+        updateHeader(session?.user ?? null);
+    });
+
+    // Sign out.
     signOutButton?.addEventListener('click', async () => {
+        signOutButton.textContent = 'Signing out...';
+        signOutButton.disabled = true;
+
         const { error } = await supabase.auth.signOut();
 
         if (!error) {
             window.location.href = '/login';
+        } else {
+            signOutButton.textContent = 'Sign out';
+            signOutButton.disabled = false;
+            console.error('Sign out failed:', error);
         }
     });
 </script>
