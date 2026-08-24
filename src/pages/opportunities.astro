@@ -62,9 +62,9 @@ const countries = [
             mb-10"
         >
 
+            <!-- SEARCH -->
             <div class="flex flex-col lg:flex-row lg:items-end gap-4">
 
-                <!-- SEARCH -->
                 <div class="flex-1">
 
                     <label
@@ -105,12 +105,10 @@ const countries = [
                 </div>
 
 
-                <!-- SEARCH BUTTON -->
                 <button
                     id="search-button"
                     type="button"
-                    class="op-btn op-btn-primary
-                    min-h-[50px]"
+                    class="op-btn op-btn-primary min-h-[50px]"
                 >
                     Search
                 </button>
@@ -152,8 +150,12 @@ const countries = [
                         <option value="">All types</option>
                         <option value="Scholarship">Scholarship</option>
                         <option value="Fellowship">Fellowship</option>
-                        <option value="Research Position">Research Position</option>
-                        <option value="Postdoctoral">Postdoctoral</option>
+                        <option value="Research Position">
+                            Research Position
+                        </option>
+                        <option value="Postdoctoral">
+                            Postdoctoral
+                        </option>
                         <option value="Internship">Internship</option>
                         <option value="Grant">Grant</option>
                         <option value="Job">Job</option>
@@ -185,11 +187,19 @@ const countries = [
                         focus:ring-purple-500/40"
                     >
                         <option value="">All levels</option>
-                        <option value="Undergraduate">Undergraduate</option>
-                        <option value="Master's">Master's</option>
+                        <option value="Undergraduate">
+                            Undergraduate
+                        </option>
+                        <option value="Master's">
+                            Master's
+                        </option>
                         <option value="PhD">PhD</option>
-                        <option value="Postdoctoral">Postdoctoral</option>
-                        <option value="Professional">Professional</option>
+                        <option value="Postdoctoral">
+                            Postdoctoral
+                        </option>
+                        <option value="Professional">
+                            Professional
+                        </option>
                     </select>
 
                 </div>
@@ -221,11 +231,17 @@ const countries = [
                         <option value="Law">Law</option>
                         <option value="Science">Science</option>
                         <option value="Technology">Technology</option>
-                        <option value="Engineering">Engineering</option>
+                        <option value="Engineering">
+                            Engineering
+                        </option>
                         <option value="Medicine">Medicine</option>
                         <option value="Business">Business</option>
-                        <option value="Humanities">Humanities</option>
-                        <option value="Social Sciences">Social Sciences</option>
+                        <option value="Humanities">
+                            Humanities
+                        </option>
+                        <option value="Social Sciences">
+                            Social Sciences
+                        </option>
                     </select>
 
                 </div>
@@ -254,10 +270,18 @@ const countries = [
                         focus:ring-purple-500/40"
                     >
                         <option value="">All funding</option>
-                        <option value="Fully Funded">Fully Funded</option>
-                        <option value="Partially Funded">Partially Funded</option>
-                        <option value="Tuition Only">Tuition Only</option>
-                        <option value="Stipend">Stipend</option>
+                        <option value="Fully Funded">
+                            Fully Funded
+                        </option>
+                        <option value="Partially Funded">
+                            Partially Funded
+                        </option>
+                        <option value="Tuition Only">
+                            Tuition Only
+                        </option>
+                        <option value="Stipend">
+                            Stipend
+                        </option>
                     </select>
 
                 </div>
@@ -303,7 +327,9 @@ const countries = [
 
 
             <!-- FILTER ACTIONS -->
-            <div class="flex flex-wrap items-center gap-3 mt-5">
+            <div
+                class="flex flex-wrap items-center gap-3 mt-5"
+            >
 
                 <button
                     id="clear-filters"
@@ -404,6 +430,7 @@ const countries = [
                         transition
                         hover:border-purple-400/30
                         hover:bg-white/[0.06]"
+                        data-id={opportunity.Id}
                         data-title={opportunity.Title ?? ''}
                         data-institution={opportunity.Institution ?? ''}
                         data-type={opportunity.Opportunity_type ?? ''}
@@ -426,7 +453,8 @@ const countries = [
                                     text-purple-300
                                     font-semibold mb-2"
                                 >
-                                    {opportunity.Opportunity_type ?? 'Opportunity'}
+                                    {opportunity.Opportunity_type ??
+                                        'Opportunity'}
                                 </p>
 
                                 <h3
@@ -442,7 +470,8 @@ const countries = [
 
 
                             {
-                                opportunity.Verification_status === 'verified' && (
+                                opportunity.Verification_status ===
+                                    'verified' && (
                                     <span
                                         class="shrink-0
                                         text-xs font-semibold
@@ -506,7 +535,8 @@ const countries = [
                                         px-2.5 py-1
                                         rounded-lg
                                         bg-blue-500/10
-                                        border border-blue-400/20
+                                        border
+                                        border-blue-400/20
                                         text-blue-300"
                                     >
                                         {opportunity.Academic_level}
@@ -522,7 +552,8 @@ const countries = [
                                         px-2.5 py-1
                                         rounded-lg
                                         bg-purple-500/10
-                                        border border-purple-400/20
+                                        border
+                                        border-purple-400/20
                                         text-purple-300"
                                     >
                                         {opportunity.Discipline}
@@ -538,7 +569,8 @@ const countries = [
                                         px-2.5 py-1
                                         rounded-lg
                                         bg-cyan-500/10
-                                        border border-cyan-400/20
+                                        border
+                                        border-cyan-400/20
                                         text-cyan-300"
                                     >
                                         {opportunity.Funding_type}
@@ -617,12 +649,7 @@ const countries = [
                                 class="op-btn
                                 op-btn-secondary
                                 save-opportunity"
-                                disabled
-                                title="Saving will be connected next"
-                                style="
-                                    opacity:0.65;
-                                    cursor:not-allowed;
-                                "
+                                data-opportunity-id={opportunity.Id}
                             >
                                 ☆ Save
                             </button>
@@ -667,8 +694,14 @@ const countries = [
     </section>
 
 
-    <!-- CLIENT-SIDE SEARCH + FILTERING -->
+    <!-- CLIENT-SIDE SEARCH, FILTERING + SAVING -->
     <script>
+        import { supabase } from '../lib/supabase';
+
+
+        /* =====================================================
+           ELEMENTS
+        ===================================================== */
 
         const cards =
             Array.from(
@@ -744,38 +777,44 @@ const countries = [
             );
 
 
+        const saveButtons =
+            Array.from(
+                document.querySelectorAll(
+                    '.save-opportunity'
+                )
+            );
+
+
+        /* =====================================================
+           SEARCH + FILTERING
+        ===================================================== */
+
         const runSearch = () => {
 
             const search =
-                (searchInput as HTMLInputElement | null)
-                    ?.value
+                searchInput?.value
                     .trim()
                     .toLowerCase() ?? '';
 
 
             const type =
-                (typeFilter as HTMLSelectElement | null)
-                    ?.value ?? '';
+                typeFilter?.value ?? '';
 
 
             const level =
-                (levelFilter as HTMLSelectElement | null)
-                    ?.value ?? '';
+                levelFilter?.value ?? '';
 
 
             const discipline =
-                (disciplineFilter as HTMLSelectElement | null)
-                    ?.value ?? '';
+                disciplineFilter?.value ?? '';
 
 
             const funding =
-                (fundingFilter as HTMLSelectElement | null)
-                    ?.value ?? '';
+                fundingFilter?.value ?? '';
 
 
             const country =
-                (countryFilter as HTMLSelectElement | null)
-                    ?.value ?? '';
+                countryFilter?.value ?? '';
 
 
             let visible = 0;
@@ -819,17 +858,20 @@ const countries = [
 
                 const matchesDiscipline =
                     !discipline ||
-                    element.dataset.discipline === discipline;
+                    element.dataset.discipline ===
+                        discipline;
 
 
                 const matchesFunding =
                     !funding ||
-                    element.dataset.funding === funding;
+                    element.dataset.funding ===
+                        funding;
 
 
                 const matchesCountry =
                     !country ||
-                    element.dataset.country === country;
+                    element.dataset.country ===
+                        country;
 
 
                 const visibleCard =
@@ -901,14 +943,16 @@ const countries = [
         };
 
 
-        // Search button
+        /* =====================================================
+           SEARCH EVENTS
+        ===================================================== */
+
         searchButton?.addEventListener(
             'click',
             runSearch
         );
 
 
-        // Press Enter inside search box
         searchInput?.addEventListener(
             'keydown',
             (event) => {
@@ -917,15 +961,17 @@ const countries = [
                     event instanceof KeyboardEvent &&
                     event.key === 'Enter'
                 ) {
+
                     event.preventDefault();
+
                     runSearch();
+
                 }
 
             }
         );
 
 
-        // Filters apply when changed
         [
             typeFilter,
             levelFilter,
@@ -942,34 +988,55 @@ const countries = [
         });
 
 
-        // Clear filters
+        /* =====================================================
+           CLEAR FILTERS
+        ===================================================== */
+
         clearFiltersButton?.addEventListener(
             'click',
             () => {
 
                 if (searchInput) {
-                    (searchInput as HTMLInputElement).value = '';
+                    (
+                        searchInput as HTMLInputElement
+                    ).value = '';
                 }
+
 
                 if (typeFilter) {
-                    (typeFilter as HTMLSelectElement).value = '';
+                    (
+                        typeFilter as HTMLSelectElement
+                    ).value = '';
                 }
+
 
                 if (levelFilter) {
-                    (levelFilter as HTMLSelectElement).value = '';
+                    (
+                        levelFilter as HTMLSelectElement
+                    ).value = '';
                 }
+
 
                 if (disciplineFilter) {
-                    (disciplineFilter as HTMLSelectElement).value = '';
+                    (
+                        disciplineFilter as HTMLSelectElement
+                    ).value = '';
                 }
+
 
                 if (fundingFilter) {
-                    (fundingFilter as HTMLSelectElement).value = '';
+                    (
+                        fundingFilter as HTMLSelectElement
+                    ).value = '';
                 }
 
+
                 if (countryFilter) {
-                    (countryFilter as HTMLSelectElement).value = '';
+                    (
+                        countryFilter as HTMLSelectElement
+                    ).value = '';
                 }
+
 
                 runSearch();
 
@@ -977,8 +1044,298 @@ const countries = [
         );
 
 
-        // Initial state
+        /* =====================================================
+           LOAD SAVED OPPORTUNITIES
+        ===================================================== */
+
+        const loadSavedOpportunities =
+            async () => {
+
+                const {
+                    data: {
+                        user
+                    }
+                } =
+                    await supabase.auth.getUser();
+
+
+                if (!user) {
+                    return;
+                }
+
+
+                const {
+                    data: savedRows,
+                    error
+                } =
+                    await supabase
+                        .from(
+                            'saved_opportunities'
+                        )
+                        .select(
+                            'opportunity_id'
+                        )
+                        .eq(
+                            'user_id',
+                            user.id
+                        );
+
+
+                if (error) {
+
+                    console.error(
+                        'Unable to load saved opportunities:',
+                        error
+                    );
+
+                    return;
+
+                }
+
+
+                const savedIds =
+                    new Set(
+                        (savedRows ?? [])
+                            .map(
+                                (row) =>
+                                    row.opportunity_id
+                            )
+                    );
+
+
+                saveButtons.forEach(
+                    (button) => {
+
+                        const opportunityId =
+                            button.getAttribute(
+                                'data-opportunity-id'
+                            );
+
+
+                        if (
+                            opportunityId &&
+                            savedIds.has(
+                                opportunityId
+                            )
+                        ) {
+
+                            setSavedState(
+                                button,
+                                true
+                            );
+
+                        }
+
+                    }
+                );
+
+            };
+
+
+        /* =====================================================
+           SAVE BUTTON STATE
+        ===================================================== */
+
+        const setSavedState =
+            (
+                button: Element,
+                saved: boolean
+            ) => {
+
+                const htmlButton =
+                    button as HTMLButtonElement;
+
+
+                if (saved) {
+
+                    htmlButton.textContent =
+                        '✓ Saved';
+
+                    htmlButton.classList.add(
+                        'saved'
+                    );
+
+                    htmlButton.style.opacity =
+                        '1';
+
+                } else {
+
+                    htmlButton.textContent =
+                        '☆ Save';
+
+                    htmlButton.classList.remove(
+                        'saved'
+                    );
+
+                    htmlButton.style.opacity =
+                        '1';
+
+                }
+
+            };
+
+
+        /* =====================================================
+           SAVE / REMOVE OPPORTUNITY
+        ===================================================== */
+
+        const toggleSave =
+            async (
+                button: Element
+            ) => {
+
+                const htmlButton =
+                    button as HTMLButtonElement;
+
+
+                const opportunityId =
+                    htmlButton.getAttribute(
+                        'data-opportunity-id'
+                    );
+
+
+                if (!opportunityId) {
+                    return;
+                }
+
+
+                const {
+                    data: {
+                        user
+                    }
+                } =
+                    await supabase.auth.getUser();
+
+
+                if (!user) {
+
+                    window.location.href =
+                        '/login';
+
+                    return;
+
+                }
+
+
+                const currentlySaved =
+                    htmlButton.classList.contains(
+                        'saved'
+                    );
+
+
+                htmlButton.disabled =
+                    true;
+
+
+                if (!currentlySaved) {
+
+                    const {
+                        error
+                    } =
+                        await supabase
+                            .from(
+                                'saved_opportunities'
+                            )
+                            .insert({
+                                user_id:
+                                    user.id,
+                                opportunity_id:
+                                    opportunityId
+                            });
+
+
+                    if (error) {
+
+                        console.error(
+                            'Unable to save opportunity:',
+                            error
+                        );
+
+
+                        alert(
+                            'Unable to save this opportunity. Please try again.'
+                        );
+
+                    } else {
+
+                        setSavedState(
+                            htmlButton,
+                            true
+                        );
+
+                    }
+
+                } else {
+
+                    const {
+                        error
+                    } =
+                        await supabase
+                            .from(
+                                'saved_opportunities'
+                            )
+                            .delete()
+                            .eq(
+                                'user_id',
+                                user.id
+                            )
+                            .eq(
+                                'opportunity_id',
+                                opportunityId
+                            );
+
+
+                    if (error) {
+
+                        console.error(
+                            'Unable to remove saved opportunity:',
+                            error
+                        );
+
+
+                        alert(
+                            'Unable to remove this saved opportunity. Please try again.'
+                        );
+
+                    } else {
+
+                        setSavedState(
+                            htmlButton,
+                            false
+                        );
+
+                    }
+
+                }
+
+
+                htmlButton.disabled =
+                    false;
+
+            };
+
+
+        saveButtons.forEach(
+            (button) => {
+
+                button.addEventListener(
+                    'click',
+                    () => {
+                        toggleSave(button);
+                    }
+                );
+
+            }
+        );
+
+
+        /* =====================================================
+           INITIALIZE
+        ===================================================== */
+
         runSearch();
+
+        loadSavedOpportunities();
 
     </script>
 
